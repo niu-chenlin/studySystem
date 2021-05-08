@@ -14,6 +14,7 @@ import store from "./redux/store";
 export class AntdMain extends React.Component<any> {
     constructor(props: any) {
         super(props);
+        console.log(store.getState());
     }
     render() {
         return <Switch>
@@ -23,7 +24,9 @@ export class AntdMain extends React.Component<any> {
             }}>
             </Route>
             <Route path={"/main"} render={()=>{ // replace 定位到一个页面后不能点击返回 goBack 不会往页面历史中增加
-                return ( // store 作为一个 prop 传给 Provider 组件
+                return (
+                    // store 作为一个 prop 传给 Provider 组件，让其所有子组件都可以访问到store
+                    // 原理是通过react context（上下文）实现的 本质上 Provider 就是给 connect 提供 store 用的
                     <Provider store={store}>
                         <MainView/>
                     </Provider>

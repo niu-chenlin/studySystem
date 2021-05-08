@@ -3,11 +3,21 @@
   "version": "1.0.0",
   "description": "ncl-antd",
   "main": "src/main.tsx",
+  "apidoc": {
+    "name": "example",
+    "version": "0.1.0",
+    "description": "apiDoc basic example",
+    "apidoc": {
+      "title": "Custom apiDoc browser title",
+      "url": "https://api.github.com/v1"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "tsc -w -p ./tsconfig.json",
     "dev-dashboard": "webpack --config ./webpack.config.js",
-    "run-server": "webpack-dev-server"
+    "run-server": "webpack-dev-server",
+    "run-apidoc": "apidoc -i src/ -o apidoc/"
   },
   "keywords": [
     "test"
@@ -29,15 +39,21 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.3",
     "react-router-dom": "^4.3.1",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.13.15",
     "@types/node": "^12.19.5",
     "@types/node-schedule": "^1.2.2",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^4.2.7",
+    "apidoc": "^0.27.1",
     "autoprefixer": "^9.8.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "css-loader": "^2.1.0",
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",

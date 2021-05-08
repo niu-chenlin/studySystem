@@ -1,4 +1,5 @@
 import * as React from "react";
+import { connect } from 'react-redux';
 import {Route, RouteComponentProps, withRouter} from "react-router";
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import {
@@ -13,14 +14,22 @@ import {
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 import { ShowMenuActionCreator } from '../redux/actions/MenuActionCreator';
+import {MenuContainer} from "../containers/menu/menu-container";
+// import {Test} from "../containers/menu/test";
+// import {LoginView} from "./login-view/login-view";
 
+// 使用Provider容器组件和connect方法  Provider可以理解为一个容器组件，使store可连接  connect可以理解为一个高阶组件（以组件为参数，生成另外的组件）
+// @ts-ignore
+@connect(state => ({ state }), {  })
 class MainView extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
             collapsed: false
         }
-
+        console.log('-----------111');
+        console.log(this.props);
+        console.log(this.context);
     }
     toggle = () => {
         this.setState({
@@ -32,6 +41,7 @@ class MainView extends React.Component<any, any> {
             <Layout style={{ minHeight: '100vh' }}>
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
                     <div className="logo">
+                        <MenuContainer menuList={this.props.state[0]}></MenuContainer>
                         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                             <Menu.Item key="1" icon={<PieChartOutlined />}>
                                 Option 1

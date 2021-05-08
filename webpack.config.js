@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const DecoratorsLegacy = require('babel-plugin-transform-decorators-legacy');
 const aliyunTheme = require('@ant-design/aliyun-theme');
 const { getThemeVariables } = require('antd/dist/theme');
 

@@ -1,8 +1,14 @@
-
+/**
+ * 为什么要把菜单数据定义到redux中呢？
+ * 原因：菜单数据可能存在权限控制行为，基于数据驱动视图，render不同权限下的菜单数据
+ * Create Date: 2021-5-7
+ * Create Auth: 牛晨林
+ */
 const MenuState = [
     {
         name: "Dashboard",
         key: "dashboard",
+        icon: "",
         role: "0",
         router: "/router",
         component: "",
