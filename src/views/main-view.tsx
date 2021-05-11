@@ -1,15 +1,11 @@
 import * as React from "react";
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {Route, RouteComponentProps, withRouter} from "react-router";
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import {
     MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    DesktopOutlined,
-    PieChartOutlined,
-    FileOutlined,
-    TeamOutlined,
-    UserOutlined,
+    MenuFoldOutlined
 } from '@ant-design/icons';
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
@@ -17,10 +13,40 @@ import { ShowMenuActionCreator } from '../redux/actions/MenuActionCreator';
 import {MenuContainer} from "../containers/menu/menu-container";
 // import {Test} from "../containers/menu/test";
 // import {LoginView} from "./login-view/login-view";
-
+const mapStateToProps = (state, ownProps) => {
+    // connect的第一个参数，作用是把store复制到组件的props中，组件内部就可以就使用this.props[store]来直接访问redux数据。可用来摘取想要的信息
+    // 当 state 变化，或者 ownProps 变化的时候，mapStateToProps 都会被调用，计算出一个新的 stateProps，（在与 ownProps merge 后）更新给组件。
+    console.log(state); // store的数据
+    console.log(ownProps); // 组件自己的props
+    return {state}; // 返回一个对象，否则state将直接赋值在this.props中。此处就是this.props.state
+}
+const mapDispatchToProps = (dispatch, ownProps) => { // 用来建立UI组件的参数到store.dispatch方法的映射
+    // return {
+    //     testClick: (...args) => dispatch(ShowMenuActionCreator(...args)) // 通过this.props,testClick({action}) 即可，缺点时只能调用单个action
+    // }
+    // return {
+    //     resetMenuClick: ()=> dispatch(ShowMenuActionCreator()), // 在组件内部就不用通过this.props.dispatch()来调用， 直接使用this.reset...
+    // }
+    // 用于建立组件跟store.dispatch的映射关系,可以是一个object，也可以传入函数
+    // 如果mapDispatchToProps是一个函数，它可以传入dispatch,ownProps, 定义UI组件如何发出action，实际上就是要调用dispatch这个方法
+    return bindActionCreators({
+        increase: ShowMenuActionCreator,
+        decrease: ShowMenuActionCreator
+    }, dispatch);
+}
+// bindActionCreators源码
+// function bindActionCreators(actionCreators,dispatch) {
+//     let obj = {};
+//     for(let i in actionCreators) {
+//         obj[i] = function() {
+//             dispatch(actionCreators[i]);
+//         }
+//     }
+//     return obj;
+// }
 // 使用Provider容器组件和connect方法  Provider可以理解为一个容器组件，使store可连接  connect可以理解为一个高阶组件（以组件为参数，生成另外的组件）
 // @ts-ignore
-@connect(state => ({ state }), {  })
+@connect(mapStateToProps, mapDispatchToProps)
 class MainView extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -29,7 +55,7 @@ class MainView extends React.Component<any, any> {
         }
         console.log('-----------111');
         console.log(this.props);
-        console.log(this.context);
+        console.log(this.props.dispatch);
     }
     toggle = () => {
         this.setState({
@@ -41,27 +67,7 @@ class MainView extends React.Component<any, any> {
             <Layout style={{ minHeight: '100vh' }}>
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
                     <div className="logo">
-                        <MenuContainer menuList={this.props.state[0]}></MenuContainer>
-                        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                            <Menu.Item key="1" icon={<PieChartOutlined />}>
-                                Option 1
-                            </Menu.Item>
-                            <Menu.Item key="2" icon={<DesktopOutlined />}>
-                                Option 2
-                            </Menu.Item>
-                            <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-                                <Menu.Item key="3">Tom</Menu.Item>
-                                <Menu.Item key="4">Bill</Menu.Item>
-                                <Menu.Item key="5">Alex</Menu.Item>
-                            </SubMenu>
-                            <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-                                <Menu.Item key="6">Team 1</Menu.Item>
-                                <Menu.Item key="8">Team 2</Menu.Item>
-                            </SubMenu>
-                            <Menu.Item key="9" icon={<FileOutlined />}>
-                                Files
-                            </Menu.Item>
-                        </Menu>
+                        <MenuContainer menuList={this.props.state[0]}/>
                     </div>
                 </Sider>
                 <Layout className="site-layout">

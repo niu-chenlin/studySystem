@@ -1,20 +1,23 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {createStore} from "redux";
 import { Provider } from 'react-redux'
-
 import {Redirect, Route, Switch} from "react-router";
 import {HashRouter} from "react-router-dom";
 import MainView from "./views/main-view";
 import {LoginView} from "./views/login-view/login-view";
 import "./static/style.scss";
 import store from "./redux/store";
-
+import {ROUTER} from "./routers";
 
 export class AntdMain extends React.Component<any> {
     constructor(props: any) {
         super(props);
         console.log(store.getState());
+    }
+    renderRoute(routeList) {
+        routeList.map(route => {
+            return <Route path={route.path} exact={route.exact} component={route.component}/>
+        });
     }
     render() {
         return <Switch>
@@ -32,6 +35,7 @@ export class AntdMain extends React.Component<any> {
                     </Provider>
                 )
             }}/>
+            {this.renderRoute(ROUTER)}
             <Route render={()=>{return <Redirect to={'/main'}/>}}/>
         </Switch>
     }

@@ -1,3 +1,13 @@
+import {
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+    DesktopOutlined,
+    PieChartOutlined,
+    FileOutlined,
+    TeamOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
+import * as React from "react";
 /**
  * 为什么要把菜单数据定义到redux中呢？
  * 原因：菜单数据可能存在权限控制行为，基于数据驱动视图，render不同权限下的菜单数据
@@ -8,114 +18,97 @@ const MenuState = [
     {
         name: "Dashboard",
         key: "dashboard",
-        icon: "",
+        icon: <PieChartOutlined />,
         role: "0",
         router: "/router",
-        component: "",
-        isChild: false,
-        children: []
     },
     {
-        name: "BaseWeb",
-        key: "base-web",
+        name: "leaflet",
+        key: "leaflet",
+        icon: <DesktopOutlined />,
         role: "0",
-        router: "/baseWeb",
-        component: "",
-        isChild: true,
+        router: "/leaflet",
         children: [
             {
-                name: "BaseWebJs",
-                key: "base-web-js",
+                name: "理论",
+                key: "leafletTheory",
                 role: "0",
-                router: "/baseWebJs",
-                component: "",
-                isChild: false,
-                children: []
+                router: "/leafletTheory",
             },
             {
-                name: "BaseWebCss",
-                key: "base-web-css",
+                name: "实例",
+                key: "leafletInstance",
                 role: "0",
-                router: "/baseWebCss",
-                component: "",
-                isChild: false,
-                children: []
+                router: "/leafletInstance",
             },
             {
-                name: "BaseWebHtml",
-                key: "base-web-html",
+                name: "其他",
+                key: "leafletOther",
                 role: "0",
-                router: "/baseWebHtml",
-                component: "",
-                isChild: false,
-                children: []
+                router: "/leafletOther",
             }
         ]
     },
     {
-        name: "DeepWeb",
-        key: "deep-web",
+        name: "React",
+        key: "BaseReact",
+        icon: <UserOutlined />,
         role: "0",
-        router: "/deepWeb",
-        component: "",
-        isChild: true,
+        router: "/baseReact",
         children: [
+            {
+                name: "Redux",
+                key: "Redux",
+                role: "0",
+                router: "/reactRedux",
+            },
             {
                 name: "DeepWebJs",
                 key: "deep-web-js",
                 role: "0",
                 router: "/deepWebJs",
-                component: "",
-                isChild: false,
-                children: []
             },
             {
                 name: "DeepWebCss",
                 key: "deep-web-css",
                 role: "0",
                 router: "/deepWebCss",
-                component: "",
-                isChild: false,
-                children: []
             },
             {
                 name: "DeepWebHtml",
                 key: "deep-web-html",
                 role: "0",
                 router: "/deepWebHtml",
-                component: "",
-                isChild: false,
-                children: []
             }
         ]
     },
     {
         name: "NodeJs",
         key: "node",
+        icon: <TeamOutlined />,
         role: "0",
         router: "/node",
-        component: "",
-        isChild: true,
         children: [
             {
                 name: "express",
                 key: "express",
                 role: "0",
                 router: "/nodeExpress",
-                component: "",
-                isChild: false,
-                children: []
             },
             {
                 name: "koa",
                 key: "koa",
                 role: "0",
                 router: "/nodeKoa",
-                component: "",
-                isChild: false,
-                children: []
             },
         ]
+    },
+    {
+        name: "Last",
+        key: "last",
+        icon: <FileOutlined />,
+        role: "0",
+        router: "/last",
     },
 ]
 
