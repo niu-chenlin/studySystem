@@ -1,15 +1,16 @@
 import * as React from "react";
+import {withRouter} from "react-router";
 import {AuthorObj, AuthorTool} from "../../tools/author-tool";
 import {Menu} from "antd";
 const { SubMenu } = Menu;
 
-interface MenuContainerProps {
+interface MenuContainerProps extends React.DetailedHTMLProps<any, any>{
     menuList: any;
 }
 
-export class MenuContainer extends React.Component<MenuContainerProps, any> {
+class MenuContainer extends React.Component<MenuContainerProps, any> {
     authorObj: AuthorObj = AuthorTool.getAuthor();
-    constructor(props: MenuContainerProps) {
+    constructor(props: any) {
         super(props);
         let renderMenuByRole = this.getMenuByRoleFun();
         let menuList = this.renderMenu(renderMenuByRole);
@@ -18,15 +19,11 @@ export class MenuContainer extends React.Component<MenuContainerProps, any> {
         }
     }
     static getDerivedStateFromProps(nextProps, prevState) { // 从props中获取state
-        console.log("new life cycle");
         let {menuList} = nextProps;
         if(menuList != prevState.menuList) {
             return {prevState}
         }
         return null;
-    }
-    componentDidMount() {
-
     }
     getMenuByRoleFun() {
         return this.props.menuList.filter(item => {
@@ -47,9 +44,7 @@ export class MenuContainer extends React.Component<MenuContainerProps, any> {
         });
     }
     menuOnClick(e) {
-        console.log(3333333333);
-        console.log(e);
-        this.props
+        this.props.history.push('/main/' + e.key);
     }
     render() {
         return  <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={(e) => this.menuOnClick(e)}>
@@ -57,3 +52,4 @@ export class MenuContainer extends React.Component<MenuContainerProps, any> {
         </Menu>
     }
 }
+export default withRouter(MenuContainer)

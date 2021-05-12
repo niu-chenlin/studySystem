@@ -8,6 +8,9 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import * as React from "react";
+import {DashboardView} from "../../views/dashboard-view/dashboard-view";
+import {AboutView} from "../../views/about-view/about-view";
+import {ReduxView} from "../../views/react-view/redux-view";
 /**
  * 为什么要把菜单数据定义到redux中呢？
  * 原因：菜单数据可能存在权限控制行为，基于数据驱动视图，render不同权限下的菜单数据
@@ -20,53 +23,47 @@ const MenuState = [
         key: "dashboard",
         icon: <PieChartOutlined />,
         role: "0",
-        router: "/router",
+        component: DashboardView
     },
     {
         name: "leaflet",
         key: "leaflet",
         icon: <DesktopOutlined />,
         role: "0",
-        router: "/leaflet",
         children: [
             {
                 name: "理论",
                 key: "leafletTheory",
-                role: "0",
-                router: "/leafletTheory",
+                role: "0"
             },
             {
                 name: "实例",
                 key: "leafletInstance",
                 role: "0",
-                router: "/leafletInstance",
             },
             {
                 name: "其他",
                 key: "leafletOther",
                 role: "0",
-                router: "/leafletOther",
             }
         ]
     },
     {
         name: "React",
-        key: "BaseReact",
+        key: "react",
         icon: <UserOutlined />,
         role: "0",
-        router: "/baseReact",
         children: [
             {
                 name: "Redux",
-                key: "Redux",
+                key: "reactRedux",
                 role: "0",
-                router: "/reactRedux",
+                component: ReduxView
             },
             {
                 name: "DeepWebJs",
                 key: "deep-web-js",
                 role: "0",
-                router: "/deepWebJs",
             },
             {
                 name: "DeepWebCss",
@@ -109,6 +106,13 @@ const MenuState = [
         icon: <FileOutlined />,
         role: "0",
         router: "/last",
+    },
+    {
+        name: "关于",
+        key: "about",
+        icon: <FileOutlined />,
+        role: "0",
+        component: AboutView
     },
 ]
 

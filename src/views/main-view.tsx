@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Route, RouteComponentProps, withRouter} from "react-router";
+import {Route, RouteComponentProps, Switch, withRouter} from "react-router";
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import {
     MenuUnfoldOutlined,
@@ -10,7 +10,11 @@ import {
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 import { ShowMenuActionCreator } from '../redux/actions/MenuActionCreator';
-import {MenuContainer} from "../containers/menu/menu-container";
+import MenuContainer from "../containers/menu/menu-container";
+import {LoginView} from "./login-view/login-view";
+import {ReduxView} from "./react-view/redux-view";
+import {AboutView} from "./about-view/about-view";
+import {ROUTER} from "../routers";
 // import {Test} from "../containers/menu/test";
 // import {LoginView} from "./login-view/login-view";
 const mapStateToProps = (state, ownProps) => {
@@ -53,21 +57,28 @@ class MainView extends React.Component<any, any> {
         this.state = {
             collapsed: false
         }
-        console.log('-----------111');
-        console.log(this.props);
-        console.log(this.props.dispatch);
     }
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed
         });
     };
+    renderRoute(routeArr) {
+        return routeArr.map(route => {
+            if(route.children) {
+                return this.renderRoute(route.children);
+            } else {
+                return <Route path={"/main/" + route.key} exact={route.exact} component={route.component}/>
+            }
+        });
+    }
     render() {
+        let {state} = this.props;
         return <div className={'App'}>
             <Layout style={{ minHeight: '100vh' }}>
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
                     <div className="logo">
-                        <MenuContainer menuList={this.props.state[0]}/>
+                        <MenuContainer menuList={state[0]}/>
                     </div>
                 </Sider>
                 <Layout className="site-layout">
@@ -84,11 +95,10 @@ class MainView extends React.Component<any, any> {
                     </Header>
                     <Content className="site-layout-background"
                         style={{
-                            margin: '15px 15px 0 15px',
-                            padding: 20,
+                            margin: '10px 15px 0 15px',
                             minHeight: 280
                         }}>
-                        <Button type="link">Link Button</Button>
+                        {this.renderRoute(state[0])}
                     </Content>
                     <Footer
                         style={{

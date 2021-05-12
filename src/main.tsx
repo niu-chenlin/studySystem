@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from 'react-redux'
 import {Redirect, Route, Switch} from "react-router";
-import {HashRouter} from "react-router-dom";
+import {HashRouter, BrowserRouter} from "react-router-dom";
 import MainView from "./views/main-view";
 import {LoginView} from "./views/login-view/login-view";
 import "./static/style.scss";
@@ -14,11 +14,7 @@ export class AntdMain extends React.Component<any> {
         super(props);
         console.log(store.getState());
     }
-    renderRoute(routeList) {
-        routeList.map(route => {
-            return <Route path={route.path} exact={route.exact} component={route.component}/>
-        });
-    }
+
     render() {
         return <Switch>
             <Route path={'/auto'} exact render={() => {return <Redirect to={'/auto/login'}/>}}/>
@@ -35,7 +31,6 @@ export class AntdMain extends React.Component<any> {
                     </Provider>
                 )
             }}/>
-            {this.renderRoute(ROUTER)}
             <Route render={()=>{return <Redirect to={'/main'}/>}}/>
         </Switch>
     }
