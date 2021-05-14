@@ -23,7 +23,7 @@ const MenuState = [
         key: "dashboard",
         icon: <PieChartOutlined />,
         role: "0",
-        component: DashboardView
+        component: <DashboardView/>
     },
     {
         name: "leaflet",
@@ -58,7 +58,7 @@ const MenuState = [
                 name: "Redux",
                 key: "reactRedux",
                 role: "0",
-                component: ReduxView
+                component: <ReduxView/>
             },
             {
                 name: "DeepWebJs",

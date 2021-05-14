@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {Route, RouteComponentProps, Switch, withRouter} from "react-router";
-import { Layout, Menu, Breadcrumb, Button } from 'antd';
+import {Layout, Menu, Breadcrumb, Button, Spin} from 'antd';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined
@@ -15,6 +15,7 @@ import {LoginView} from "./login-view/login-view";
 import {ReduxView} from "./react-view/redux-view";
 import {AboutView} from "./about-view/about-view";
 import {ROUTER} from "../routers";
+import {changeViewLoading} from "../redux/actions/ViewActionCreator";
 // import {Test} from "../containers/menu/test";
 // import {LoginView} from "./login-view/login-view";
 const mapStateToProps = (state, ownProps) => {
@@ -35,7 +36,8 @@ const mapDispatchToProps = (dispatch, ownProps) => { // 用来建立UI组件的�
     // 如果mapDispatchToProps是一个函数，它可以传入dispatch,ownProps, 定义UI组件如何发出action，实际上就是要调用dispatch这个方法
     return bindActionCreators({
         increase: ShowMenuActionCreator,
-        decrease: ShowMenuActionCreator
+        decrease: ShowMenuActionCreator,
+        changeViewLoading: changeViewLoading
     }, dispatch);
 }
 // bindActionCreators源码
@@ -58,6 +60,16 @@ class MainView extends React.Component<any, any> {
             collapsed: false
         }
     }
+    componentDidMount() {
+        console.log('----------------');
+        console.log(this);
+        console.log(this.context);
+        // this.props.changeViewLoading(true);
+        // setTimeout(() => {
+        //     // this.props.display(changeViewLoading(false));
+        //     this.props.changeViewLoading(false);
+        // }, 1000);
+    }
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed
@@ -67,8 +79,20 @@ class MainView extends React.Component<any, any> {
         return routeArr.map(route => {
             if(route.children) {
                 return this.renderRoute(route.children);
-            } else {
-                return <Route path={"/main/" + route.key} exact={route.exact} component={route.component}/>
+            } else { // component={route.component}
+                return <Route
+                    key={route.key}
+                    path={"/main/" + route.key}
+                    exact={route.exact}
+                    render={(props) => {
+                        // console.log(1111111111);
+                        // console.log(route.component);
+                        // if(route.component) {
+                        //     route.component.props = {...props}
+                        // }
+                        return route.component
+                    }}
+                />
             }
         });
     }
@@ -95,9 +119,13 @@ class MainView extends React.Component<any, any> {
                     </Header>
                     <Content className="site-layout-background"
                         style={{
-                            margin: '10px 15px 0 15px',
-                            minHeight: 280
+                            padding: '10px 15px 0 15px',
+                            minHeight: 280,
+                            position: 'relative'
                         }}>
+                        <div className={"g-modal-mask"} style={{display: state[1].loading ? "block" : "none"}}>
+                            <Spin className={"g-spin"} size="large" tip="Loading..."/>
+                        </div>
                         {this.renderRoute(state[0])}
                     </Content>
                     <Footer

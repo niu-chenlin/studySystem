@@ -11,5 +11,7 @@ import {SHOW_MENU} from "./ActionType";
  * */
 export const ShowMenuActionCreator = (value?: any) => ({
     type: SHOW_MENU,
-    value
+    payload: {
+        loading: value
+    }
 })

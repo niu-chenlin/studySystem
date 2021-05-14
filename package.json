@@ -15,7 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "tsc -w -p ./tsconfig.json",
-    "dev-dashboard": "cross-env NODE_ENV=production webpack --progress --watch",
+    "dev-dashboard": "cross-env NODE_ENV=development webpack --progress --watch",
     "run-server": "webpack-dev-server",
     "run-apidoc": "apidoc -i src/ -o apidoc/"
   },

@@ -3,6 +3,8 @@ import reducers from "./reducers";
 import reduxLogger from "redux-logger";
 import reduxThunk from "redux-thunk";
 import reduxPromise from "redux-promise";
+import MenuState from "./state/MenuState";
+import MenuReducers from "./reducers/menuReducers";
 
 /**
  * store 通过reducers创建redux单一数据源
@@ -16,7 +18,9 @@ import reduxPromise from "redux-promise";
  * 中间件一般都有”熔断“行为，会判断是否执行下一个中间件
  */
 const store = createStore(
-    reducers, // 第一个参数为redux的reducer(store的处理方法)
+    // MenuReducers, // 第一个参数为redux的reducer(store的处理方法)
+    reducers
+    // MenuState // 第二个参数为默认State，前提是不使用combineReducers，如果是使用combineReducers，建议在Reducers中写默认值 (state = {}, action)
     // applyMiddleware(reduxPromise, reduxThunk, reduxLogger) // 峰哥的建议是吧logger日志中间件写在最后面，具体原因需要你去了解一下中间件的执行机制
 ); // 使用reducer创建store //内部会第一次调用reducer函数，得到初始state
 export default store;

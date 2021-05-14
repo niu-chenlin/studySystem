@@ -41,6 +41,34 @@ module.exports = {
                     configFile: path.join("./tsconfig.json")
                 }
             },
+            // {
+            //     test:/\.scss?$/,
+            //     use: [
+            //         MiniCssExtractPlugin.loader,
+            //         "css-loader",
+            //         "sass-loader"
+            //     ]
+            // },
+
+            // {
+            //     oneOf: [
+            //         {
+            //             test:/\.less?$/,
+            //             loader: "less-loader",
+            //             options: {
+            //                 modifyVars: getThemeVariables({
+            //                     dark: true, // 开启暗黑模式
+            //                     // compact: true, // 开启紧凑模式
+            //                 }),
+            //                 javascriptEnabled: true
+            //             }
+            //         },
+            //         {
+            //             test:/\.scss$/,
+            //             loader: "sass-loader",
+            //         }
+            //     ]
+            // },
             {
                 test:/\.(css|scss|less)?$/,
                 use: [
