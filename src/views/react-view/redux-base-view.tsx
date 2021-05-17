@@ -3,7 +3,6 @@ import { Tag, Divider, Card, Table, Collapse, Select } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import {connect} from "react-redux";
 import {GlobalTool} from "../../tools/global-tool";
-import {EventEmitter} from "events";
 const { Panel } = Collapse;
 const { Option } = Select;
 
@@ -64,7 +63,11 @@ export class ReduxBaseView extends React.Component<any, any> {
                         </Panel>
                         <Panel header="subscribe(listener)" key="4" extra={this.getExtra()}>
                             sate.subscribe(listener)：订阅者模式（订阅者-发布机制）通知UI，做出对应的改变，感觉和NodeJs的EventEmitter类似，用于监听state的修改<br/>
-                            项目中如果使用了Redux的Provider和connect可省略此方法，因为connect源码中componentDidMount添加了事件this.store.subscribe(this.handleChange)，实现页面交互
+                            项目中如果使用了Redux的Provider和connect可省略此方法，因为connect源码中componentDidMount添加了事件this.store.subscribe(this.handleChange)，实现页面交互<br/>
+                            其底层实现为subscribe主要维护listeners数组（负责listeners的添加和销毁操作），当页面调用dispatch时，执行所有的listeners。查看源码得知，dispatch就是一顿循环加执行。
+                        </Panel>
+                        <Panel header="replaceReucer(action)" key="5" extra={this.getExtra()}>
+                            替换reducer，改变state更新逻辑
                         </Panel>
                         <Panel header="代码示例" key="5" extra={this.getExtra()}>
                             <pre>
@@ -72,9 +75,27 @@ export class ReduxBaseView extends React.Component<any, any> {
                                     <span>pre和code标签，看看啥效果。Markdown编辑器是如何生成html标签的？ <br/>
                                     Markdown编辑器实现：<a href='https://www.jianshu.com/p/20f137e2b8c9'>https://www.jianshu.com/p/20f137e2b8c9</a></span>
                                     <br/>
-                                    你会按格式展示吗？
-                                        我不会的！
                                 </code>
+                                {`
+let reducers = (state = MenuState, action) = &#62; {
+    switch (action.type) {
+       case SHOW_MENU:
+            return state;
+       default:
+            return state;
+    }
+}
+let action = {
+    type: SHOW_MENU,
+    payload: value
+};
+let store = createStore(reducers);
+store.getState();
+store.dispatch(action);
+store.subscribe((value) = &#62; {
+   this.setState({state: value});
+});
+                                `}
                             </pre>
                         </Panel>
                     </Collapse>
@@ -83,14 +104,51 @@ export class ReduxBaseView extends React.Component<any, any> {
                     因为Redux并不知道你的应用程序里会作什么动作，需要有一个明确说明有哪些动作的地方，在运作时以这个对照表为基准。
                     描述对象格式：{'\u007b'} type,payload{'\u007d'}
                     <br/>
-                    <b style={{color: "red"}}>*</b>payload：它是负载或有效数据的意思，Payload用在计算机科学的意思，是指在数据传输时的"有效数据"部份。
-                    actionCreator：一种实现视图Action的简洁方法。最好的使用方法：bindActionCreators，它是一个柯里化函数（高阶函数）。<br/>
-                    bindActionCreators：实现原理（主要就一行代码） return dispatch(actionCreator.apply(this, arguments))
+                    <div className={"g-text-mark"}>
+                        payload：它是负载或有效数据的意思，Payload用在计算机科学的意思，是指在数据传输时的"有效数据"部份。
+                        actionCreator：一种实现视图Action的简洁方法。最好的使用方法：bindActionCreators，它是一个柯里化函数（高阶函数）。<br/>
+                        bindActionCreators：实现原理（主要就一行代码） return dispatch(actionCreator.apply(this, arguments))
+                    </div>
+                    <Collapse expandIconPosition={"left"}>
+                        <Panel header="actionCreator" key="1" extra={this.getExtra()}>
+                            在大型项目中，直接把action写在组件中，会很散乱，改和找都不好，所以如果action多了的话，建议在 /src/store/actionCreator.js 中统一管理
+                        </Panel>
+                        <Panel header="代码示例" key="2" extra={this.getExtra()}>
+                            <pre>
+                                {`
+export const changeViewLoading = (value?: any) => ({
+    type: LOADING_VIEW,
+    payload: {
+        loading: value
+    }
+})
+                                `}
+                            </pre>
+                        </Panel>
+                    </Collapse>
                 </Card>
                 <Card title="纯函数Reducers" style={{ width: "33%" }}>
                     Redux的Action处理方法，一个纯函数，只负责判断后返回state。当调用store.dispatch(action)时，源码中的实现方法很简单，
                     就是调用createStore传入的第一个参数（reducer）<br/>
-                    <b style={{color: "red"}}>*</b>纯函数是指执行没有副作用的js函数，即参数相同得到的结果永远相同
+                    <div className={"g-text-mark"}>
+                        纯函数是指执行没有副作用的js函数，即参数相同得到的结果永远相同
+                    </div>
+                    <Collapse expandIconPosition={"left"}>
+                        <Panel header="代码示例" key="2" extra={this.getExtra()}>
+                            <pre>
+                                {`
+const MenuReducers = (state = MenuState, action) => {
+    switch (action.type) {
+        case SHOW_MENU:
+            return state;
+        default:
+            return state;
+    }
+};
+                                `}
+                            </pre>
+                        </Panel>
+                    </Collapse>
                 </Card>
             </div>
             <h3>Redux三大原则</h3>

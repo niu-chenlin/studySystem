@@ -51,6 +51,7 @@ const mapDispatchToProps = (dispatch, ownProps) => { // 用来建立UI组件的�
 //     return obj;
 // }
 // 使用Provider容器组件和connect方法  Provider可以理解为一个容器组件，使store可连接  connect可以理解为一个高阶组件（以组件为参数，生成另外的组件）
+// TypeScript 2.6支持在.ts文件中通过在报错一行上方使用// @ts-ignore来忽略错误。
 // @ts-ignore
 @connect(mapStateToProps, mapDispatchToProps)
 class MainView extends React.Component<any, any> {
