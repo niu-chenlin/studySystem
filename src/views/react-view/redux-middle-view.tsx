@@ -19,6 +19,48 @@ export class ReduxMiddleView extends React.Component<any, any> {
             onClick={event => {event.stopPropagation()}}
         />
     }
+    testCode() {
+        // 数组求和
+        let sum = [0, 1, 2, 3].reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        // 计算数组中每个元素出现的次数
+        var series = ['a1', 'a3', 'a1', 'a5',  'a7', 'a1', 'a3', 'a4', 'a2', 'a1'];
+        var result= series.reduce(function (accumulator, current) {
+            if (current in accumulator) {
+                accumulator[current]++;
+            }
+            else {
+                accumulator[current] = 1;
+            }
+            return accumulator;
+        }, {});
+        console.log(JSON.stringify(result));
+        // 使用reduce实现数组去重
+        var a = [1, 1, 2, 3, 4, 4, 5, 6, 6, 6, 7];
+        // Array.prototype.duplicate = function() {
+        //     return this.reduce(function(cal, cur) {
+        //         if(cal.indexOf(cur) === -1) {
+        //             cal.push(cur);
+        //         }
+        //         return cal;
+        //     }, [])
+        // }
+        // var newArr = a.duplicate();
+        // redux compose函数
+        // export default function compose(...funcs) {
+            //     if (funcs.length === 0) {
+            //         return arg => arg
+            //     }
+            //
+            //     if (funcs.length === 1) {
+            //         return funcs[0]
+            //     }
+            //
+            //     return funcs.reduce((a, b) => (...args) => a(b(...args)))
+            // }
+        //
+    }
     render() {
         return <>
             <h3>什么是Redux自动化</h3>
@@ -48,7 +90,7 @@ export class ReduxMiddleView extends React.Component<any, any> {
                     关于手动实现一个Provider可以定位到 src/views/manual-redux/automatic-static 目录。后续我会把这些测试代码放到git中进行管理。
                 </Card>
                 <Card title="connect" style={{ width: "33%" }}>
-                    connect作为一个高阶组件，主要接受2个参数，第三个参数有啥用？参数定义如下：
+                    connect作为一个高阶组件，主要接受2个参数，后面的2个参数不常用。参数定义如下：
                     <Collapse expandIconPosition={"left"}>
                         <Panel header="[mapStateToProps(state, [ownProps]): stateProps] (Function)" key="1" extra={this.getExtra()}>
                             作用是把store复制到组件的props中，组件内部就可以就使用this.props[store]来直接访问redux数据。
@@ -74,14 +116,18 @@ export class ReduxMiddleView extends React.Component<any, any> {
                             Object.assign({}, ownProps, stateProps, dispatchProps) 的结果。
                         </Panel>
                         <Panel header="[options] (Object)" key="4" extra={this.getExtra()}>
-                            如果指定这个参数，可以定制 connector 的行为。
+                            如果指定这个参数，可以定制 connector 的行为。<br/>
+                            [pure = true] (Boolean): 如果为 true，connector 将执行 shouldComponentUpdate 并且浅对比 mergeProps 的结果，避免不必要的更新，
+                            前提是当前组件是一个“纯”组件，它不依赖于任何的输入或 state 而只依赖于 props 和 Redux store 的 state。默认值为 true。<br/>
+                            [withRef = false] (Boolean): 如果为 true，connector 会保存一个对被包装组件实例的引用，该引用通过 getWrappedInstance() 方法获得。
+                            默认值为 false。
                         </Panel>
                     </Collapse>
                 </Card>
-                <Card title="纯函数Reducers" style={{ width: "33%" }}>
-                    Redux的Action处理方法，一个纯函数，只负责判断后返回state。当调用store.dispatch(action)时，源码中的实现方法很简单，
-                    就是调用createStore传入的第一个参数（reducer）<br/>
-                    <b style={{color: "red"}}>*</b>纯函数是指执行没有副作用的js函数，即参数相同得到的结果永远相同
+                <Card title="Redux中间件applyMiddleware" style={{ width: "33%" }}>
+                    applyMiddlewares Redux 的原生方法，作用是将所有中间件组成一个数组，依次执行。<br/>
+                    手动实现请查看代码文件：src/redux/state/store.tsx。<br/>
+
                 </Card>
             </div>
             <Tag color="#87d068">Action</Tag>

@@ -7,22 +7,29 @@ import MainView from "./views/main-view";
 import {LoginView} from "./views/login-view/login-view";
 import "./static/style.less";
 import store from "./redux/store";
-import {ROUTER} from "./routers";
+import {AuthorTool} from "./tools/author-tool";
+
 
 export class AntdMain extends React.Component<any> {
     constructor(props: any) {
         super(props);
-        console.log(store.getState());
+        AuthorTool.initAuthor();
+    }
+    componentDidMount(): void {
+
     }
 
     render() {
         return <Switch>
-            <Route path={'/auto'} exact render={() => {return <Redirect to={'/auto/login'}/>}}/>
-            <Route path={'/auto/login'} exact render={() => {
+            {/*<Route path={'/auto'} exact render={() => {return <Redirect to={'/auto/login'}/>}}/>*/}
+            <Route path={'/login'} exact render={() => {
                 return <LoginView/>
             }}>
             </Route>
             <Route path={"/main"} render={()=>{ // replace 定位到一个页面后不能点击返回 goBack 不会往页面历史中增加
+                if(!AuthorTool.getAuthor()) {
+                    return <Redirect to={'/login'}/>
+                }
                 return (
                     // store 作为一个 prop 传给 Provider 组件，让其所有子组件都可以访问到store
                     // 原理是通过react context（上下文）实现的 本质上 Provider 就是给 connect 提供 store 用的

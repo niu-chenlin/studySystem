@@ -132,7 +132,7 @@ module.exports = {
         inline: true,
         contentBase:  path.join(__dirname, "dist"),
     },
-    devtool: "source-map",
+    devtool: "inline-source-map", // source-map
     plugins: [
         new MiniCssExtractPlugin({
             // css 样式分离 webpack默认会把 import '_name.css'这种导入文件直接写在html中生成内联样式，
