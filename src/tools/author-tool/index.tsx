@@ -36,6 +36,14 @@ export class AuthorTool {
         sessionStorage.setItem("initAuthor", JSON.stringify(this._initialData));
     }
 
+    public static checkAuthor(username: string, password: string) {
+        let sqlData: AuthorObj[] = JSON.parse(sessionStorage.getItem("initAuthor"));
+        sqlData.forEach((data) => {
+            if(data.name === username && data.pwd === password) return true;
+        });
+        return false;
+    }
+
     public static setAuthor(value: AuthorObj) {
         sessionStorage.setItem(AuthorToken, JSON.stringify(value));
     }

@@ -13,7 +13,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist'),
         filename: "[name].js?[hash]",
-        // publicPath: 'src'
+        // publicPath: '/static/' // js css img的前置目录
     },
     optimization: {
         minimize: true, // 压缩JS代码
@@ -72,7 +72,15 @@ module.exports = {
             {
                 test:/\.(css|scss|less)?$/,
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            // 当前的css所在的文件相对于打包后的根路径dist的相对路径
+                            // 分离css文件导致css背景图片路径错误，解决方案的核心是配置publicPath的值，
+                            // publicPath的值是css文件所在的文件目录相对于根目录的相对路径值。 比如，根路径是/,css文件所在的目录是/css/，因此相对路径是..
+                            publicPath: '../../'
+                        }
+                    },
                     "css-loader",
                     // {
                     //     loader: "postcss-loader",
@@ -115,14 +123,14 @@ module.exports = {
                 test: /\.(ttf|eot|woff)/,
                 loader: "file-loader",
                 options: {
-                    name: 'font/[name].[ext]?[hash]'
+                    name: './publicStatic/font/[name].[ext]?[hash]'
                 }
             },
             {
-                test: /\.(ico|svg|png|jpg)/,
+                test: /\.(ico|svg|png|jpg|jpeg)/,
                 loader: "file-loader",
                 options: {
-                    name: 'img/[name].[ext]?[hash]'
+                    name: './publicStatic/img/[name].[ext]?[hash]'
                 }
             }
         ]
@@ -132,13 +140,13 @@ module.exports = {
         inline: true,
         contentBase:  path.join(__dirname, "dist"),
     },
-    devtool: "inline-source-map", // source-map
+    devtool: "source-map", // inline-source-map
     plugins: [
         new MiniCssExtractPlugin({
             // css 样式分离 webpack默认会把 import '_name.css'这种导入文件直接写在html中生成内联样式，
             // 使用mini-css-extract-plugin插件可以将css样式抽离到一个文件中，其中
             // mini-css-extract-plugin是webpack4.0所使用的分离插件 extract-text-webpack-plugin是4.0之前的分离插件
-            filename:"style/[name].css?[hash]",
+            filename:"./publicStatic/style/[name].css?[hash]",
             chunkFilename: "[id].css"
         }),
         new HtmlWebpackPlugin({
