@@ -1,5 +1,4 @@
 import * as React from "react";
-// import {  } from "react-router";
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {ValidationTool} from "../../tools/validation-tool";
@@ -7,6 +6,8 @@ import {AuthorTool} from "../../tools/author-tool";
 const loginUrl = require("../../static/img/login1.jpeg");
 import * as test from "testnpm_ncl";
 import { VerificationCode } from "verification_code_ncl";
+import { g_canvas_color } from "../../config/global-config";
+import { Test } from "../test/test";
 
 interface LoginViewStates {
     [key: string]: any,
@@ -58,6 +59,10 @@ export class LoginView extends React.Component<any, LoginViewStates> {
         test.printMsg();
         test.test333('1', '2');
     }
+
+    onVerification(resMsg: any) {
+        console.log(resMsg);
+    }
     render() {
         return <div id="login-view">
             <div className="l-left">
@@ -90,13 +95,15 @@ export class LoginView extends React.Component<any, LoginViewStates> {
                                    onChange={(e: any) => {this.doInputChange(e, "pwd")}}
                             />
                         </Form.Item>
+                        <VerificationCode
+                          onResult={(resMsg) => this.onVerification(resMsg)}
+                          onResCanvasColor={() => (g_canvas_color[Math.floor(Math.random() * g_canvas_color.length)])}/>
                         <Form.Item>
                             <Button type="primary" disabled={this.state.btnDisabled} htmlType="submit" className="login-form-button" onClick={(e: any) => this.doLogin(e)}>
                                 Log in
                             </Button>
                         </Form.Item>
                     </Form>
-                    <VerificationCode/>
                 </div>
             </div>
             <div className="l-right">

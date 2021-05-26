@@ -42,6 +42,36 @@
         border-radius: @radius;
       }
     }
+    #myCanvas {
+      border-radius: 10px;
+      height: 3.2rem;
+    }
+    #v_input {
+      width: 30%;
+      height: 3.2rem !important;
+      border-radius: 10px;
+      background-color: #4b4a4a;
+      border: 1px solid #4b4a4a;
+      color: white;
+      &:focus-visible {
+        outline: 0;
+        border: 1px solid #a59d43;
+      }
+    }
+    #v_button {
+      height: 3.2rem !important;
+      background-color: #177ddc;
+      box-shadow: 0 0 0;
+      &.activate {
+        background-color: #177ddc;
+        box-shadow: 0 0 0;
+      }
+      &.forbid {
+        background-color: #141414;
+        box-shadow: 0 0;
+        border: 1px solid #434343;
+      }
+    }
   }
   .l-right {
     float: left;
