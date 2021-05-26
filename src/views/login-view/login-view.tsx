@@ -1,8 +1,12 @@
 import * as React from "react";
+// import {  } from "react-router";
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {ValidationTool} from "../../tools/validation-tool";
+import {AuthorTool} from "../../tools/author-tool";
 const loginUrl = require("../../static/img/login1.jpeg");
+// import test from "testnpm_ncl";
+// import * as t from "verification_code_ncl";
 
 interface LoginViewStates {
     [key: string]: any,
@@ -13,6 +17,7 @@ interface LoginViewStates {
 export class LoginView extends React.Component<any, LoginViewStates> {
     timeId: any;
     constructor(props: any) {
+        // test.printMsg();
         super(props);
         this.state = {
             nameValidateStatus: "",
@@ -44,6 +49,9 @@ export class LoginView extends React.Component<any, LoginViewStates> {
         }
     }
     doLogin(form: any) {
+        if(AuthorTool.checkAuthor(form.username, form.password)) {
+            // console.log(this.loca);
+        }
         console.log(form);
     }
     render() {

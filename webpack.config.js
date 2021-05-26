@@ -35,7 +35,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(ts|tsx)?$/,
-                exclude: /node_modules/,
+                // exclude: /node_modules/,
                 loader: "ts-loader",
                 options: {
                     configFile: path.join("./tsconfig.json")
@@ -71,6 +71,7 @@ module.exports = {
             // },
             {
                 test:/\.(css|scss|less)?$/,
+                // exclude: /node_modules/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
@@ -121,6 +122,7 @@ module.exports = {
             },
             {
                 test: /\.(ttf|eot|woff)/,
+                // exclude: /node_modules/,
                 loader: "file-loader",
                 options: {
                     name: './publicStatic/font/[name].[ext]?[hash]'
@@ -128,6 +130,7 @@ module.exports = {
             },
             {
                 test: /\.(ico|svg|png|jpg|jpeg)/,
+                // exclude: /node_modules/,
                 loader: "file-loader",
                 options: {
                     name: './publicStatic/img/[name].[ext]?[hash]'
@@ -149,6 +152,8 @@ module.exports = {
             filename:"./publicStatic/style/[name].css?[hash]",
             chunkFilename: "[id].css"
         }),
+        // 将 webpack中`entry`配置的相关入口chunk  和  `extract-text-webpack-plugin`抽取的css样式   插入到该插件提供的`template`或者`templateContent`
+        // 配置项指定的内容基础上生成一个html文件，具体插入方式是将样式`link`插入到`head`元素中，`script`插入到`head`或者`body`中。
         new HtmlWebpackPlugin({
             template:"./index.html",
             filename: './index.html',

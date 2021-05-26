@@ -61,3 +61,6 @@ ReactDOM.render((
 //         (1).BrowserRouter没有任何影响，因为state保存在history对象中。
 //         (2).HashRouter刷新后会导致路由state参数的丢失！！！
 //     4.备注：HashRouter可以用于解决一些路径错误相关的问题。
+
+// react-router-dom: 基于react-router，加入了在浏览器运行环境下的一些功能，例如：Link组件，会渲染一个a标签，Link组件源码a标签行;
+// BrowserRouter和HashRouter 组件，前者使用pushState和popState事件构建路由，后者使用window.location.hash和hashchange事件构建路由。
