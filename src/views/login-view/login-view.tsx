@@ -5,8 +5,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {ValidationTool} from "../../tools/validation-tool";
 import {AuthorTool} from "../../tools/author-tool";
 const loginUrl = require("../../static/img/login1.jpeg");
-// import test from "testnpm_ncl";
-// import * as t from "verification_code_ncl";
+import * as test from "testnpm_ncl";
+import { VerificationCode } from "verification_code_ncl";
 
 interface LoginViewStates {
     [key: string]: any,
@@ -24,6 +24,7 @@ export class LoginView extends React.Component<any, LoginViewStates> {
             pwdValidateStatus: "",
             btnDisabled: true
         }
+        console.log(VerificationCode);
     }
     changeValueByValidation(v: string, t: string) {
         // 这里没必要使用闭包，因为有先天条件对timeId进行缓存，使用闭包反而容易造成内存溢出的风险
@@ -53,6 +54,9 @@ export class LoginView extends React.Component<any, LoginViewStates> {
             // console.log(this.loca);
         }
         console.log(form);
+        console.log(test);
+        test.printMsg();
+        test.test333('1', '2');
     }
     render() {
         return <div id="login-view">
@@ -92,6 +96,7 @@ export class LoginView extends React.Component<any, LoginViewStates> {
                             </Button>
                         </Form.Item>
                     </Form>
+                    <VerificationCode/>
                 </div>
             </div>
             <div className="l-right">
