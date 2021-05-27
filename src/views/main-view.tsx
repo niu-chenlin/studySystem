@@ -11,7 +11,7 @@ const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 import { ShowMenuActionCreator } from '../redux/actions/MenuActionCreator';
 import MenuContainer from "../containers/menu/menu-container";
-import {LoginView} from "./login-view/login-view";
+import LoginView from "./login-view/login-view";
 import {ReduxView} from "./react-view/redux-view";
 import {AboutView} from "./about-view/about-view";
 import {ROUTER} from "../routers";

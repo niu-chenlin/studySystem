@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import {Redirect, Route, Switch} from "react-router";
 import {HashRouter, BrowserRouter} from "react-router-dom";
 import MainView from "./views/main-view";
-import {LoginView} from "./views/login-view/login-view";
+import LoginView from "./views/login-view/login-view";
 import "./static/style.less";
 import store from "./redux/store";
 import {AuthorTool} from "./tools/author-tool";

@@ -35,6 +35,7 @@
   "dependencies": {
     "@ant-design/aliyun-theme": "0.0.4",
     "antd": "^4.15.2",
+    "js-base64": "^3.6.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -45,7 +46,7 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "testnpm_ncl": "^1.0.8",
-    "verification_code_ncl": "^1.0.14"
+    "verification_code_ncl": "^1.0.15"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.13.15",

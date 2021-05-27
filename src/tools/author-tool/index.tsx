@@ -1,9 +1,10 @@
 import * as uuid from "uuid";
+import * as Base64 from "js-base64";
 const AuthorToken = "AuthorToken";
 export interface AuthorObj {
     id: string;
     name: string;
-    expire?: Date; // 如果使用sessionStorage这个参数没必要
+    expire?: number; // 过期时间毫秒数
     pwd: string;
     role: number;
 }
@@ -12,19 +13,22 @@ export class AuthorTool {
         {
             id: uuid.v4(),
             name: "admin",
-            pwd: "_admin",
+            pwd: Base64.encode("_admin"),
+            expire: 60*60*1000,
             role: 0
         },
         {
             id: uuid.v4(),
             name: "test1",
-            pwd: "_test1",
+            pwd: Base64.encode("_test1"),
+            expire: 60*60*1000,
             role: 1
         },
         {
             id: uuid.v4(),
             name: "test2",
-            pwd: "_test2",
+            pwd: Base64.encode("_test2"),
+            expire: 60*60*1000,
             role: 2
         }
     ];
@@ -39,8 +43,9 @@ export class AuthorTool {
     public static checkAuthor(username: string, password: string) {
         let sqlData: AuthorObj[] = JSON.parse(sessionStorage.getItem("initAuthor"));
         sqlData.forEach((data) => {
-            if(data.name === username && data.pwd === password) return true;
+            if(data.name === username && Base64.decode(data.pwd) === password) return true;
         });
+
         return false;
     }
 

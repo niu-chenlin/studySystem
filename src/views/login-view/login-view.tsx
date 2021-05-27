@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {ValidationTool} from "../../tools/validation-tool";
-import {AuthorTool} from "../../tools/author-tool";
+import { AuthorTool } from "../../tools/author-tool";
 const loginUrl = require("../../static/img/login1.jpeg");
-import * as test from "testnpm_ncl";
 import { VerificationCode } from "verification_code_ncl";
 import { g_canvas_color } from "../../config/global-config";
+import { withRouter } from "react-router";
 import { Test } from "../test/test";
 
 interface LoginViewStates {
@@ -15,8 +15,9 @@ interface LoginViewStates {
     pwdValidateStatus: any,
     btnDisabled: boolean
 }
-export class LoginView extends React.Component<any, LoginViewStates> {
+class LoginView extends React.Component<any, LoginViewStates> {
     timeId: any;
+    verificationRes: boolean = false;
     constructor(props: any) {
         // test.printMsg();
         super(props);
@@ -25,7 +26,6 @@ export class LoginView extends React.Component<any, LoginViewStates> {
             pwdValidateStatus: "",
             btnDisabled: true
         }
-        console.log(VerificationCode);
     }
     changeValueByValidation(v: string, t: string) {
         // 这里没必要使用闭包，因为有先天条件对timeId进行缓存，使用闭包反而容易造成内存溢出的风险
@@ -44,7 +44,7 @@ export class LoginView extends React.Component<any, LoginViewStates> {
     }
     setBtnDisabled() {
         let {nameValidateStatus, pwdValidateStatus} = this.state;
-        if(nameValidateStatus === "success" && pwdValidateStatus === "success") {
+        if(nameValidateStatus === "success" && pwdValidateStatus === "success" && this.verificationRes) {
             this.setState({btnDisabled: false});
         } else {
             this.setState({btnDisabled: true});
@@ -52,16 +52,25 @@ export class LoginView extends React.Component<any, LoginViewStates> {
     }
     doLogin(form: any) {
         if(AuthorTool.checkAuthor(form.username, form.password)) {
-            // console.log(this.loca);
+            AuthorTool.setAuthor(form);
+            setTimeout(() => {
+                this.props.history.push("/main");
+            }, 500);
+            message.success("登录成功！");
+        } else {
+            message.error("用户名密码错误！");
         }
-        console.log(form);
-        console.log(test);
-        test.printMsg();
-        test.test333('1', '2');
     }
 
     onVerification(resMsg: any) {
-        console.log(resMsg);
+        if(resMsg.code === 200) {
+          this.verificationRes = true;
+          message.success(resMsg.msg);
+        } else {
+          this.verificationRes = false;
+          message.error(resMsg.msg);
+        }
+      this.setBtnDisabled();
     }
     render() {
         return <div id="login-view">
@@ -95,7 +104,7 @@ export class LoginView extends React.Component<any, LoginViewStates> {
                                    onChange={(e: any) => {this.doInputChange(e, "pwd")}}
                             />
                         </Form.Item>
-                        <VerificationCode
+                        <Test
                           onResult={(resMsg) => this.onVerification(resMsg)}
                           onResCanvasColor={() => (g_canvas_color[Math.floor(Math.random() * g_canvas_color.length)])}/>
                         <Form.Item>
@@ -112,3 +121,4 @@ export class LoginView extends React.Component<any, LoginViewStates> {
         </div>
     }
 }
+export default withRouter(LoginView);
