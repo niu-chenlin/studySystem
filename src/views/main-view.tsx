@@ -16,6 +16,7 @@ import {ReduxView} from "./react-view/redux-view";
 import {AboutView} from "./about-view/about-view";
 import {ROUTER} from "../routers";
 import {changeViewLoading} from "../redux/actions/ViewActionCreator";
+import { HeaderView } from "./header-view/header-view";
 // import {Test} from "../containers/menu/test";
 // import {LoginView} from "./login-view/login-view";
 const mapStateToProps = (state, ownProps) => {
@@ -63,14 +64,22 @@ class MainView extends React.Component<any, any> {
     }
     componentDidMount() {
         console.log('----------------');
-        console.log(this);
-        console.log(this.context);
+        console.log(111111);
+        console.log(this.props.state[1]);
+        // console.log(this);
+        // console.log(this.context);
         // this.props.changeViewLoading(true);
         // setTimeout(() => {
         //     // this.props.display(changeViewLoading(false));
         //     this.props.changeViewLoading(false);
         // }, 1000);
     }
+    componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any): void {
+        console.log(222222);
+        console.log(nextProps);
+        console.log(nextContext);
+    }
+
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed
@@ -98,6 +107,8 @@ class MainView extends React.Component<any, any> {
         });
     }
     render() {
+        console.log(333333);
+        console.log(this.props.state[1]);
         let {state} = this.props;
         return <div className={'App'}>
             <Layout style={{ minHeight: '100vh' }}>
@@ -107,7 +118,7 @@ class MainView extends React.Component<any, any> {
                     </div>
                 </Sider>
                 <Layout className="site-layout">
-                    <Header className="site-layout-background">
+                    <Header className="site-layout-background" style={{position: 'relative'}}>
                         {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                             className: 'trigger',
                             onClick: this.toggle,
@@ -117,6 +128,7 @@ class MainView extends React.Component<any, any> {
                             }
                         }
                         )}
+                        <HeaderView/>
                     </Header>
                     <Content className="site-layout-background"
                         style={{

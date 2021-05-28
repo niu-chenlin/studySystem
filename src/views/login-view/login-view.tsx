@@ -2,7 +2,7 @@ import * as React from "react";
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {ValidationTool} from "../../tools/validation-tool";
-import { AuthorTool } from "../../tools/author-tool";
+import { AuthorObj, AuthorTool } from "../../tools/author-tool";
 const loginUrl = require("../../static/img/login1.jpeg");
 import { VerificationCode } from "verification_code_ncl";
 import { g_canvas_color } from "../../config/global-config";
@@ -13,28 +13,30 @@ interface LoginViewStates {
     [key: string]: any,
     nameValidateStatus: any,
     pwdValidateStatus: any,
-    btnDisabled: boolean
+    btnDisabled: boolean,
+    testStyle: any
 }
 class LoginView extends React.Component<any, LoginViewStates> {
-    timeId: any;
+    nameTimeId: any;
+    pwdTimeId: any;
     verificationRes: boolean = false;
     constructor(props: any) {
-        // test.printMsg();
         super(props);
         this.state = {
             nameValidateStatus: "",
             pwdValidateStatus: "",
-            btnDisabled: true
+            btnDisabled: true,
+            testStyle: {overflow: 'hidden'}
         }
     }
     changeValueByValidation(v: string, t: string) {
         // 这里没必要使用闭包，因为有先天条件对timeId进行缓存，使用闭包反而容易造成内存溢出的风险
-        if(this.timeId) clearTimeout(this.timeId);
-        this.timeId = setTimeout(() => {
+        if(this[t + 'TimeId']) clearTimeout(this[t + 'TimeId']);
+        this[t + 'TimeId'] = setTimeout(() => {
             if(ValidationTool.validationLogin(v)) {
-                this.setState({[t + "ValidateStatus"] : "success"}, () => {this.setBtnDisabled()});
+                this.setState({[t + "ValidateStatus"] : "success"});
             } else {
-                this.setState({[t + "ValidateStatus"] : "error"}, () => {this.setBtnDisabled()});
+                this.setState({[t + "ValidateStatus"] : "error"});
             }
         }, 500);
     }
@@ -42,35 +44,28 @@ class LoginView extends React.Component<any, LoginViewStates> {
         this.setState({[t + "ValidateStatus"] : "validating"});
         this.changeValueByValidation(e.target.value, t);
     }
-    setBtnDisabled() {
-        let {nameValidateStatus, pwdValidateStatus} = this.state;
-        if(nameValidateStatus === "success" && pwdValidateStatus === "success" && this.verificationRes) {
-            this.setState({btnDisabled: false});
-        } else {
-            this.setState({btnDisabled: true});
-        }
-    }
+
     doLogin(form: any) {
-        if(AuthorTool.checkAuthor(form.username, form.password)) {
-            AuthorTool.setAuthor(form);
-            setTimeout(() => {
-                this.props.history.push("/main");
-            }, 500);
-            message.success("登录成功！");
+        if(!this.verificationRes) message.error("验证码错误！");
+        let {nameValidateStatus, pwdValidateStatus} = this.state;
+        if(nameValidateStatus === "success" && pwdValidateStatus === "success") {
+            let loginData = AuthorTool.getAuthorByLogin(form.username, form.password);
+            if(loginData) {
+                AuthorTool.setAuthor(loginData);
+                setTimeout(() => {
+                    this.props.history.push("/main");
+                }, 800);
+                message.success("登录成功！");
+            } else {
+                message.error("用户名密码错误！");
+            }
         } else {
-            message.error("用户名密码错误！");
+            message.error("登录失败，请确认输入信息是否有误！");
         }
     }
 
     onVerification(resMsg: any) {
-        if(resMsg.code === 200) {
-          this.verificationRes = true;
-          message.success(resMsg.msg);
-        } else {
-          this.verificationRes = false;
-          message.error(resMsg.msg);
-        }
-      this.setBtnDisabled();
+        this.verificationRes = resMsg.code === 200;
     }
     render() {
         return <div id="login-view">
@@ -104,11 +99,11 @@ class LoginView extends React.Component<any, LoginViewStates> {
                                    onChange={(e: any) => {this.doInputChange(e, "pwd")}}
                             />
                         </Form.Item>
-                        <Test
+                        <VerificationCode
                           onResult={(resMsg) => this.onVerification(resMsg)}
                           onResCanvasColor={() => (g_canvas_color[Math.floor(Math.random() * g_canvas_color.length)])}/>
                         <Form.Item>
-                            <Button type="primary" disabled={this.state.btnDisabled} htmlType="submit" className="login-form-button" onClick={(e: any) => this.doLogin(e)}>
+                            <Button type="primary" htmlType="submit" className="login-form-button">
                                 Log in
                             </Button>
                         </Form.Item>

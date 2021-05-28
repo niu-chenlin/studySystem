@@ -40,13 +40,17 @@ export class AuthorTool {
         sessionStorage.setItem("initAuthor", JSON.stringify(this._initialData));
     }
 
-    public static checkAuthor(username: string, password: string) {
+    public static getAuthorByLogin(username: string, password: string) {
         let sqlData: AuthorObj[] = JSON.parse(sessionStorage.getItem("initAuthor"));
-        sqlData.forEach((data) => {
-            if(data.name === username && Base64.decode(data.pwd) === password) return true;
+        // return sqlData.some(data => { // 只要数组中有一项满足条件就返回true 否则返回false。与arr.every相反
+        //     return  data.name === username && Base64.decode(data.pwd) === password;
+        // });
+        let retData = sqlData.filter(data => {
+            return  data.name === username && Base64.decode(data.pwd) === password;
         });
-
-        return false;
+        console.log(retData);
+        return retData[0];
+        // 使用forEach循环无法正常终止，只能抛出异常实现forEach终止，抛出异常在这里不适用
     }
 
     public static setAuthor(value: AuthorObj) {
