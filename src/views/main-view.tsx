@@ -16,7 +16,7 @@ import {ReduxView} from "./react-view/redux-view";
 import {AboutView} from "./about-view/about-view";
 import {ROUTER} from "../routers";
 import {changeViewLoading} from "../redux/actions/ViewActionCreator";
-import { HeaderView } from "./header-view/header-view";
+import HeaderView from "./header-view/header-view";
 // import {Test} from "../containers/menu/test";
 // import {LoginView} from "./login-view/login-view";
 const mapStateToProps = (state, ownProps) => {

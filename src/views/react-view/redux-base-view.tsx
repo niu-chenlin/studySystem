@@ -69,7 +69,7 @@ export class ReduxBaseView extends React.Component<any, any> {
                         <Panel header="replaceReucer(action)" key="5" extra={this.getExtra()}>
                             替换reducer，改变state更新逻辑
                         </Panel>
-                        <Panel header="代码示例" key="5" extra={this.getExtra()}>
+                        <Panel header="代码示例" key="6" extra={this.getExtra()}>
                             <pre>
                                 <code>
                                     <span>pre和code标签，看看啥效果。Markdown编辑器是如何生成html标签的？ <br/>

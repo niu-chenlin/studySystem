@@ -97,7 +97,7 @@ module.exports = {
                         loader: "less-loader",
                         options: {
                             modifyVars: getThemeVariables({
-                                dark: true, // 开启暗黑模式
+                                dark: false, // 是否开启暗黑模式
                                 // compact: true, // 开启紧凑模式
                             }),
                             javascriptEnabled: true
