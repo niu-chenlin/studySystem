@@ -11,7 +11,7 @@ import * as React from "react";
 import {DashboardView} from "../../views/dashboard-view/dashboard-view";
 import {AboutView} from "../../views/about-view/about-view";
 import {ReduxView} from "../../views/react-view/redux-view";
-import {ReactContextView} from "../../views/text-view/react-context-view";
+import {ReactContextView} from "../../views/react-context-view/react-context-view";
 /**
  * 为什么要把菜单数据定义到redux中呢？
  * 原因：菜单数据可能存在权限控制行为，基于数据驱动视图，render不同权限下的菜单数据
@@ -62,7 +62,7 @@ const MenuState = [
                 component: <ReduxView/>
             },
             {
-                name: "测试ReactContextByTs",
+                name: "React通信-Context",
                 key: "reactContext",
                 role: "0",
                 component: <ReactContextView/>

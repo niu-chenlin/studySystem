@@ -30,7 +30,7 @@ export class ReduxView extends React.Component<any, ReduxViewStates> {
         setTimeout(() => {
             // this.props.display(changeViewLoading(false));
             this.props.changeViewLoading(false);
-        }, 1000);
+        }, 500);
     }
 
     callback(key) {

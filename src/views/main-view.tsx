@@ -17,13 +17,14 @@ import {AboutView} from "./about-view/about-view";
 import {ROUTER} from "../routers";
 import {changeViewLoading} from "../redux/actions/ViewActionCreator";
 import HeaderView from "./header-view/header-view";
+import {noResourceView} from "./error-view/404-view";
 // import {Test} from "../containers/menu/test";
 // import {LoginView} from "./login-view/login-view";
 const mapStateToProps = (state, ownProps) => {
     // connect的第一个参数，作用是把store复制到组件的props中，组件内部就可以就使用this.props[store]来直接访问redux数据。可用来摘取想要的信息
     // 当 state 变化，或者 ownProps 变化的时候，mapStateToProps 都会被调用，计算出一个新的 stateProps，（在与 ownProps merge 后）更新给组件。
-    console.log(state); // store的数据
-    console.log(ownProps); // 组件自己的props
+    // console.log(state); // store的数据
+    // console.log(ownProps); // 组件自己的props
     return {state}; // 返回一个对象，否则state将直接赋值在this.props中。此处就是this.props.state
 }
 const mapDispatchToProps = (dispatch, ownProps) => { // 用来建立UI组件的参数到store.dispatch方法的映射
@@ -66,16 +67,7 @@ class MainView extends React.Component<any, any> {
         }
     }
     componentDidMount() {
-        console.log('----------------');
-        console.log(111111);
-        console.log(this.props.state[1]);
-        // console.log(this);
-        // console.log(this.context);
-        // this.props.changeViewLoading(true);
-        // setTimeout(() => {
-        //     // this.props.display(changeViewLoading(false));
-        //     this.props.changeViewLoading(false);
-        // }, 1000);
+
     }
     componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any): void {
         console.log(222222);
@@ -98,11 +90,14 @@ class MainView extends React.Component<any, any> {
                     path={"/main/" + route.key}
                     exact={route.exact}
                     render={(props) => {
-                        // console.log(1111111111);
-                        // console.log(route.component);
+                        console.log(1111111111);
+                        console.log(route.component);
                         // if(route.component) {
                         //     route.component.props = {...props}
                         // }
+                        if(!route.component) {
+                            return noResourceView()
+                        }
                         return route.component
                     }}
                 />
@@ -110,8 +105,7 @@ class MainView extends React.Component<any, any> {
         });
     }
     render() {
-        console.log(333333);
-        console.log(this.props.state[1]);
+        console.log("main-view-render");
         let {state} = this.props;
         return <div className={'App'}>
             <Layout style={{ minHeight: '100vh' }}>

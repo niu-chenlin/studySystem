@@ -2,7 +2,7 @@
 const ViewState = {
     testData: "00000000",
 
-    loading: true,
+    loading: false,
 
     thunkLoading: false,
     fakeThunkValue: "",
