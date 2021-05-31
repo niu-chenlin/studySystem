@@ -40,6 +40,9 @@ const mapDispatchToProps = (dispatch, ownProps) => { // 用来建立UI组件的�
         decrease: ShowMenuActionCreator,
         changeViewLoading: changeViewLoading
     }, dispatch);
+    // return {hangeViewLoading: dispatch(changeViewLoading)} // 返回一个对象时，界面中还是要显示调用dispatch，对象只不过是定义映射关系
+    // return {hanshu: dispatch(function() {})} // 如果定义的是像这样的函数，那这个函数将是一个Action Creator
+    // 对象和函数的定义是一样的作用，都是在定义Action而已，如果代码中不需要手动调用dispatch，就需要使用bindActionCreators，或者手动使用dispatch包裹
 }
 // bindActionCreators源码
 // function bindActionCreators(actionCreators,dispatch) {

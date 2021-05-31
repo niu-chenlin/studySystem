@@ -1,8 +1,10 @@
 import {applyMiddleware, compose, createStore} from 'redux'
 import reducers from "./reducers";
+import axios from "axios";
 import reduxLogger from "redux-logger";
 import reduxThunk from "redux-thunk";
 import reduxPromise from "redux-promise";
+import reduxSaga from "redux-saga";
 import MenuState from "./state/MenuState";
 import MenuReducers from "./reducers/menuReducers";
 
@@ -19,9 +21,10 @@ import MenuReducers from "./reducers/menuReducers";
  */
 const store = createStore(
     // MenuReducers, // 第一个参数为redux的reducer(store的处理方法)
-    reducers
+    reducers,
     // MenuState // 第二个参数为默认State，前提是不使用combineReducers，如果是使用combineReducers，建议在Reducers中写默认值 (state = {}, action)
     // applyMiddleware(reduxPromise, reduxThunk, reduxLogger) // 峰哥的建议是吧logger日志中间件写在最后面，具体原因需要你去了解一下中间件的执行机制
+    applyMiddleware(reduxThunk, reduxPromise, reduxLogger)
 ); // 使用reducer创建store //内部会第一次调用reducer函数，得到初始state
 export default store;
 
@@ -44,4 +47,132 @@ function applyMiddleware1(...middlewares) { // redux applyMiddleware源码实现
         dispatch = compose(...chain)(store.dispatch);
         return {...store, dispatch}
     }
+}
+
+function code_compose() { // compose方法源码
+    for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+        funcs[_key] = arguments[_key];
+    }
+    if (funcs.length === 0) {
+        return function (arg) {
+            return arg;
+        };
+    }
+    //如果长度为1，返回该函数
+    if (funcs.length === 1) {
+        return funcs[0];
+    }
+    //核心语句reduce嵌套执行所有的函数最后返回一个最终函数
+    return funcs.reduce(function (a, b) {
+        return function () {
+            return a(b.apply(undefined, arguments));
+        };
+    });
+}
+
+function f1(next) { // compose的作用类似这样 循环依次调用
+    return function() {
+        console.log('f1 start')
+        next()
+        console.log('f1 end')
+    }
+}
+function f2(next) {
+    return function() {
+        console.log('f2 start')
+        next()
+        console.log('f2 end')
+    }
+}
+function f() {
+    console.log('heart')
+}
+f1(f2(f))() //所以最后的综合逻辑函数就是类似这种M1(M2(dispatch))(action)
+
+// 正常情况下dispatch的参数只能是一个Action对象，如果我们使用Action对象实现异步的情况下，需要调用三次dispatch。
+// UI中：请求开始 dispatch({type: ajax, status: 'start'})
+// UI中：请求完成 dispatch({type: ajax, status: 200})
+// UI中：请求错误 dispatch({type: ajax, status: 500})
+// 下面介绍一下redux-thunk，当我们使用thunk中间件时，它允许dispatch的参数可以是一个异步函数，例如：
+// thunk 例子
+function test_thunk() {
+    let store = null; // 假设此处是真的store数据源
+    store.dispatch(test_ajax());
+    // 异步请求函数
+    function test_ajax() {
+        return (dispatch) => {
+            dispatch({
+                type: 'TEXT',
+                payLoad: 'titile starting.........'
+            });
+            axios('url').then(res => {
+                console.log('res',res);
+                dispatch({
+                    type: 'TEXT',
+                    payLoad: res
+                })
+            }).catch(err => {
+                dispatch({
+                    type: 'TEXT',
+                    payLoad: 'titile errors........'
+                })
+            })
+        }
+    }
+}
+// redux-promise 和 thunk一样用于实现redux的异步操作，唯一的区别是redux-promise允许dispatch的参数是一个promise对象
+// .当中间接收到的是一个Promise实例，会dispatch掉resolve的值，对于reject的结果并不做任何处理。
+function test_primise() {
+    let store = null; // 假设此处是真的store数据源
+    store.dispatch(test_ajax());
+    // 异步请求函数
+    function test_ajax() {
+        return (dispatch) => {
+            dispatch({
+                type: 'TEXT',
+                payLoad: 'titile starting.........'
+            });
+            axios('url').then(res => {
+                console.log('res',res);
+                dispatch({
+                    type: 'TEXT',
+                    payLoad: res
+                })
+            }).catch(err => {
+                dispatch({
+                    type: 'TEXT',
+                    payLoad: 'titile errors........'
+                })
+            })
+        }
+    }
+    // 发出异步 Action
+    // dispatch(createAction(
+    //     'FETCH_POSTS',
+    //     fetch(`/some/API/${postTitle}.json`)
+    //         .then(response => response.json())
+    // ));
+    // 上面代码中，第二个dispatch方法发出的是异步 Action，只有等到操作结束，这个 Action 才会实际发出。
+    // 注意，createAction的第二个参数必须是一个 Promise 对象。
+    return new Promise((resolve, reject) => {
+        if(1 == 1) {
+            resolve({type: 'ajax', status: 200});
+        }
+        reject({type: 'ajax', status: 500}); // 只有第一个会直接dispatch,第二个不会有任何操作
+    })
+    // action.payload //源码
+    //     .then(result => dispatch({ ...action, payload: result }))
+    //     .catch(error => {
+    //         dispatch({ ...action, payload: error, error: true });
+    //         return Promise.reject(error);
+    //     })
+    // 当promise的状态变成resolved的时候回进入then里面，并且重新dispatch(action)
+    // 当promise的状态变成rejected的时候回进入catch里面，并且重新dispatch(action), 同时会在action里面加一个error
+    // 从上面两种情况来看，当action.payload为promise的时候，会被重新分发，并且不会走到下一个中间件。
+//     建议
+//     从上面的源码我们看出：
+// 源码简单易懂，使用promise来解决异步，省去了额外的学习成本。但是同样由于过于简单，无法完成我们项目中一些特定的需求，比如我们想请求一个列表数据，
+// 在请求的时候我们想做一些loading的动画，由于这个中间件是直接拦截掉action, 并最终经过判断处理同样只会分发一次，这样在解决上面的应用场景中，不是很适合，同样我们判断请求成功或者失败的时候需要额外的判断error,其实是增增加了额外的约束。
+// 从上面代码可以看出，如果 Action 本身是一个 Promise，它 resolve 以后的值应该是一个 Action 对象，会被dispatch方法送出（action.then(dispatch)），但 reject 以后不会有任何动作；
+// 如果 Action 对象的payload属性是一个 Promise 对象，那么无论 resolve 和 reject，dispatch方法都会发出 Action。
 }
