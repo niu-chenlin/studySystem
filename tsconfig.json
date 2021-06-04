@@ -5,6 +5,10 @@
     "jsx": "react",
     "allowJs": true,
     "sourceMap": true,
+    "esModuleInterop": true, // 解决了 函数组件 TypeError: Cannot read property 'createElement' of undefined 问题
+    // 目前很多常用的包是基于 cjs / UMD 开发的，而写前端代码一般是写 esm，所以常见的场景是 esm 导入 cjs 的库。
+    // 但是由于 esm 和 cjs 存在概念上的差异，最大的差异点在于 esm 有 default 的概念而 cjs 没有，所以在 default 上会出问题。
+    // TS babel webpack 都有自己的一套处理机制来处理这个兼容问题，核心思想基本都是通过 default 属性的增添和读取
     "moduleResolution": "node",
     "lib": ["esnext", "dom"],
     "outDir": "dist",
