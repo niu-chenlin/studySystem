@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useReducer, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useContext, useReducer, useCallback, useMemo, useRef } from "react";
 
 export const TestHookUseState: React.FC<{}> = () => {
     // 注意
@@ -265,3 +265,97 @@ export const TestUseCallback: React.FC<{}> = () => {
         {/*<input type="text" value={value} onChange={memoizedCallback()}/>*/}
     </div>)
 };
+// useCallback使用场景：
+// 子组件接受一个props函数，一般情况当父组件更新时子组件也会更新，但是大多数情况下子组件是不需要更新的
+// 类似在子组件中使用shouldComponentUpdate判断true | false
+
+function Child({ ref,callback }) {
+    const [count, setCount] = useState(() => callback());
+    useEffect(() => { // 有点多余呀，因为useEffect传入的第二个参数改变时才会执行
+        setCount(callback());
+    }, [callback]);
+    function test() {
+        console.log("this is child test function");
+    }
+    let testData = 1;
+    return <div>
+        {count}
+    </div>
+}
+export const Parent: React.FC<{}> = () => {
+    const [count, setCount] = useState(1);
+    const [val, setVal] = useState('');
+    const childRef = useRef(Child);
+
+    const callback = useCallback(() => {
+        return count;
+    }, [count]);
+
+    function onClick() {
+        setCount(count + 1);
+        console.log(childRef.current);
+    }
+
+    return <div>
+        <h4>{count}</h4>
+        <Child ref={childRef} callback={callback}/>
+        <div>
+            <button onClick={() => onClick()}>+</button>
+            <input value={val} onChange={event => setVal(event.target.value)}/>
+        </div>
+    </div>
+};
+// 测试useRef
+export const UseRefCounter: React.FC<{}> = () => {
+    const [count, setCount] = useState(0);
+    // 点击3次加 - 2次弹框显示 - 2次加后 alert值为3 why? 常理来说应该是5 but
+    // 当我们更新状态的时候, React 会重新渲染组件, 每一次渲染都会拿到独立的 count 状态, 并重新渲染一个 handleCount 函数.
+    // 每一个 handleCount 里面都有它自己的 count 。 -- 每一次的渲染都是重新替换，所以setTimeout保留的是之前（活动对象）的引用，就像for中的let
+    const handleCount = () => {
+        setTimeout(() => {
+            alert('current count: ' + count);
+        }, 3000)
+    };
+    // 那如何显示最新的count呢？答案是可以使用ref
+    const countRef = useRef<number>(count);
+    useEffect(() => {
+        countRef.current = count
+    });
+    const handleCount1 = () => {
+        setTimeout(() => { // 使用ref就可以应用到最新的值 - 这应该只是其中之一的用法
+            alert('current count: ' + countRef.current);
+        }, 3000)
+    };
+    const inputEl = useRef<HTMLInputElement>(null);
+
+    return (
+        <div>
+            <p>current count: { count }</p>
+            <button onClick={() => setCount(count + 1)}>加</button>
+            <button onClick={() => handleCount1()}>弹框显示</button>
+            <input type="text" ref={inputEl}/>
+        </div>
+    )
+};
+// 变更.current属性不会引发组件重新渲染，根据这个特性可以获取状态的前一个值
+let set1 = new Set();
+export const UseRefCounter1: React.FC<{}> = () => {
+    const [count, setCount] = useState(0);
+    const preCountRef = useRef<number>(count); // useRef的变更不会导致组件重新render，useRef不会重新定义
+    set1.add(preCountRef);
+    console.log(count);
+    console.log(preCountRef.current);
+    useEffect(() => {
+        console.log(count);
+        console.log(`useRef会重新定义吗 ${set1.size}`); // set1.seize永远是1，由此可见useRef不会被重新定义 - 即它负责引用并缓存
+        preCountRef.current = count; // 每次渲染结束后重新赋值
+    });
+    return (
+        <div>
+            <p>pre count: { preCountRef.current }</p>
+            <p>current count: { count }</p>
+            <button onClick={() => setCount(count + 1)}>加</button>
+        </div>
+    )
+};
+// 操作DOM节点

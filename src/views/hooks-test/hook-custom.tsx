@@ -129,3 +129,116 @@ export class TestCourseClass extends React.Component<any, any> {
         </div>;
     }
 }
+
+export class TestUpdatePropsOrStateClass extends React.Component<any, any> {
+    // 一但组件的state或者props修改，将导致其下所有的子组件和子孙组件的重新render
+    testProps: String = "test";
+    constructor(props) {
+        super(props);
+        console.log("TestUpdatePropsOrStateClass");
+        this.state = {
+            value: 1
+        }
+    }
+    onChangeTest() {
+        this.setState({value: this.state.value + 1});
+        // this.testProps = "value is change";
+    }
+    render(){
+        console.log("这是父组件 - render");
+        return <div>
+            <p>这是父组件 {this.state.value}</p>
+            <button onClick={() => this.onChangeTest()}>
+                修改父组件的state value
+            </button>
+            <TestUpdatePropsOrStateSonClass value={this.state.value}/>
+            <TestUpdatePropsOrStateSon1Class/>
+        </div>;
+    }
+}
+
+class TestUpdatePropsOrStateSonClass extends React.Component<any, any> {
+    constructor(props) {
+        super(props);
+    }
+    componentWillReceiveProps(nextProps, nextState) {
+        console.log(this.props);
+        console.log(nextProps);
+        console.log(this.props == nextProps);
+    }
+    componentWillUpdate(nextProps: Readonly<any>, nextState: Readonly<any>, nextContext: any): void { // -- 已废弃
+        console.log(this.props);
+        console.log(nextProps);
+        console.log(this.props == nextProps);
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log(this.props);
+        console.log(prevProps);
+        console.log(this.props == prevProps);
+    }
+    shouldComponentUpdate(nextProps: Readonly<any>, nextState: Readonly<any>, nextContext: any): boolean {
+        // this.props
+        console.log(this.props);
+        console.log(nextProps);
+        let obj1 = {value: "test"};
+        let obj2  = {value: "test"};
+        console.log(obj1 != obj2); // this.props != nextProps
+        console.log(obj1 == obj2); // false
+        let str1 = JSON.stringify(obj1);
+        let str2 = JSON.stringify(obj2);
+        console.log(str1 == str2); // true
+        if(this.props != nextProps) { // 引用类型的判断不能使用 === 底层不触发类型转换 == 在类型不同时会触发一次类型转换
+            console.log("nextProps 不相等");
+            return true;
+        }
+        return false;
+    }
+
+    render(){
+        console.log("这是第一个子组件 - render");
+        return <div>
+            <p>这是第一个子组件 </p>
+            <TestUpdatePropsOrStateGradeSonClass/>
+        </div>;
+    }
+}
+
+class TestUpdatePropsOrStateSon1Class extends React.Component<any, any> {
+    constructor(props) {
+        super(props);
+    }
+
+    render(){
+        console.log("这是第二个子组件 - render");
+        return <div>
+            <p>这是第二个子组件</p>
+            <TestUpdatePropsOrStateGradeSon1Class/>
+        </div>;
+    }
+}
+
+class TestUpdatePropsOrStateGradeSonClass extends React.Component<any, any> {
+    constructor(props) {
+        super(props);
+    }
+
+    render(){
+        console.log("这是第一个子组件的子组件 - render");
+        return <div>
+            <p>这是第一个子组件的子组件 </p>
+        </div>;
+    }
+}
+
+class TestUpdatePropsOrStateGradeSon1Class extends React.Component<any, any> {
+    constructor(props) {
+        super(props);
+    }
+
+    render(){
+        console.log("这是第二个子组件的子组件 - render");
+        return <div>
+            <p>这是第二个子组件的子组件 </p>
+        </div>;
+    }
+}

@@ -4,14 +4,19 @@ import { changeViewLoading } from "../../redux/actions/ViewActionCreator";
 import { Example, ExampleEffectHook, ExampleUseState, StaticButton } from "../hooks-test/hooks-test";
 import { ExampleClass } from "../hooks-test/hook-state";
 import { TestHookRule } from "../hooks-test/hooks-rule";
-import { LanguageTeacher, MathematicsTeacher, TestCourseClass } from "../hooks-test/hook-custom";
+import {
+    LanguageTeacher,
+    MathematicsTeacher,
+    TestCourseClass,
+    TestUpdatePropsOrStateClass
+} from "../hooks-test/hook-custom";
 import { TestHookReducer } from "../hooks-test/hook-redux";
 import {
-    Counter,
+    Counter, Parent,
     TestHookUseEffect,
     TestHookUseState,
     TestUseContext,
-    TestUseReducer,
+    TestUseReducer, UseRefCounter, UseRefCounter1,
     WithoutMemo
 } from "../hooks-test/hook-api";
 
@@ -47,7 +52,11 @@ export class ReactHooksView extends React.Component<any, any>{
             {/*<TestUseContext/>*/}
             {/*<Counter/>*/}
             {/*<TestUseReducer/>*/}
-            <WithoutMemo/>
+            {/*<WithoutMemo/>*/}
+            {/*<Parent/>*/}
+            {/*<UseRefCounter/>*/}
+            {/*<UseRefCounter1/>*/}
+            <TestUpdatePropsOrStateClass/>
         </div>
     }
 }
