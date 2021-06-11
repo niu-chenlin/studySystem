@@ -1,4 +1,13 @@
-import React, { useEffect, useState, useContext, useReducer, useCallback, useMemo, useRef } from "react";
+import React, {
+    useEffect,
+    useState,
+    useContext,
+    useReducer,
+    useCallback,
+    useMemo,
+    useRef,
+    useImperativeHandle, forwardRef, useLayoutEffect
+} from "react";
 
 export const TestHookUseState: React.FC<{}> = () => {
     // 注意
@@ -58,6 +67,7 @@ export const TestHookUseEffect: React.FC<{}> = () => {
 
         // 虽然 useEffect 延迟到浏览器绘制完成之后，但它保证在任何新渲染之前触发。 在开始新的更新之前，React 将始终刷新先前渲染的effects 。
         // 上面这句话就像微任务和宏任务的执行时机。宏任务-render 微任务-useEffect 每次render前都会保证useEffect的执行完成
+        // 它的执行不会阻塞Css render
 
         // 更新时的条件依赖于useEffect的第二个参数，一个数组，只有当数组中的state变更时，才会执行
         // 传如一个空数组表示useEffect的执行不依赖任何state，只有在componentDidMount时执行 componentWillUnmount时执行清理
@@ -338,10 +348,12 @@ export const UseRefCounter: React.FC<{}> = () => {
     )
 };
 // 变更.current属性不会引发组件重新渲染，根据这个特性可以获取状态的前一个值
+// 请记住，当 ref 对象内容发生变化时，useRef 并不会通知你。变更 .current 属性不会引发组件重新渲染。
+// 如果想要在 React 绑定或解绑 DOM 节点的 ref 时运行某些代码，则需要使用回调 ref 来实现。
 let set1 = new Set();
 export const UseRefCounter1: React.FC<{}> = () => {
     const [count, setCount] = useState(0);
-    const preCountRef = useRef<number>(count); // useRef的变更不会导致组件重新render，useRef不会重新定义
+    const preCountRef = useRef<number>(count); // useRef的变更不会导致组件重新render，useRef不会重新定义  会在每次渲染时返回同一个 ref 对象
     set1.add(preCountRef);
     console.log(count);
     console.log(preCountRef.current);
@@ -359,3 +371,65 @@ export const UseRefCounter1: React.FC<{}> = () => {
     )
 };
 // 操作DOM节点
+export const SetDOMByCallBaskRef: React.FC<{}> = () => {
+    const [height, setHeight] = useState(0);
+    // 在这个案例中，我们没有选择使用 useRef，因为当 ref 是一个对象时它并不会把当前 ref 的值的 变化 通知到我们。
+    // 使用 callback ref 可以确保 即便子组件延迟显示被测量的节点 (比如为了响应一次点击)，我们依然能够在父组件接收到相关的信息，以便更新测量结果。
+    const callbackRef = useCallback(node => {
+        console.log(node);
+        setHeight(node.getBoundingClientRect().height);
+    }, []);
+    // 注意到我们传递了 [] 作为 useCallback 的依赖列表。这确保了 ref callback 不会在再次渲染时改变，因此 React 不会在非必要的时候调用它。
+    // 在此示例中，当且仅当组件挂载和卸载时，callback ref 才会被调用，因为渲染的 <h1> 组件在整个重新渲染期间始终存在。如果你希望在每次组件调整大小时都收到通知，
+    // 则可能需要使用 ResizeObserver 或基于其构建的第三方 Hook。
+    //
+    // const inputRef = useRef();
+    // let FancyInput = forwardRef(ImperativeHandleChild);
+    // @ts-ignore
+    // inputRef.current.focus();
+    return (<div>
+        <h1 ref={callbackRef}>hello word</h1>
+        <h2>The above header is {Math.round(height)}px taill</h2>
+        {/*<FancyInput ref={inputRef}/>*/}
+    </div>)
+};
+// useImperativeHandle
+// useImperativeHandle 可以让你在使用 ref 时自定义暴露给父组件的实例值。在大多数情况下，
+// 应当避免使用 ref 这样的命令式代码。useImperativeHandle 应当与 forwardRef 一起使用：
+function ImperativeHandleChild(ref) {
+    const inputRef = useRef();
+    // 定义ref暴漏给父组件的值
+    // 在本例中，渲染 <ImperativeHandleChild ref={inputRef} /> 的父组件可以调用 inputRef.current.focus()。
+    useImperativeHandle(ref,() => ({
+        focus: () => {
+            // @ts-ignore
+            inputRef.current.focus();
+        }
+    }));
+    return <input ref={inputRef}/>
+}
+// useLayoutEffect
+// 其函数签名与 useEffect 相同，但它会在所有的 DOM 变更之后同步调用 effect。可以使用它来读取 DOM 布局并同步触发重渲染。
+// 在浏览器执行绘制之前，useLayoutEffect 内部的更新计划将被同步刷新。
+export const TestUseEffectAndUseLayoutEffect: React.FC<{}> = () => {
+    const [count, setCount] = useState(0);
+    // 在布局和绘制后执行
+    useEffect(() => {
+       console.log("在render之后执行。确保了页面的布局与绘制执行完成");
+    });
+    // 先执行useLayoutEffect - 因为它在绘制前执行，他会同步阻塞布局和绘制
+    useLayoutEffect(() => { // 如果有DOM的操作（改变样式等），在页面绘制前执行防止页面闪屏
+        console.log("所有的DOM变更之后，同步执行 在浏览器进行任何绘制之前运行完成,阻塞了浏览器的绘制");
+    });
+    // 提示
+    //
+    // 如果你正在将代码从 class 组件迁移到使用 Hook 的函数组件，则需要注意 useLayoutEffect 与 componentDidMount、
+    // componentDidUpdate 的调用阶段是一样的。但是，我们推荐你一开始先用 useEffect，只有当它出问题的时候再尝试使用 useLayoutEffect。
+    function testClick() {
+        setCount(count + 1);
+    }
+    return (<div>
+        <h3>this is count value is {count}</h3>
+        <button onClick={() => testClick()}>点击测试</button>
+    </div>)
+};

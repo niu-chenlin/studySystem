@@ -126,6 +126,7 @@ export class TestCourseClass extends React.Component<any, any> {
             <button onClick={() => this.setState({value: this.state.value})}>
                 测试加一
             </button>
+            <TestUpdatePropsOrStateClass/>
         </div>;
     }
 }
@@ -140,6 +141,13 @@ export class TestUpdatePropsOrStateClass extends React.Component<any, any> {
             value: 1
         }
     }
+    componentDidMount() {
+        console.log("正常情况下父组件的setState不可能导致子组件的重载（重新装载）");
+    }
+    componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any): void {
+        console.log("父组件的setState只会导致子组件的更新阶段");
+    }
+
     onChangeTest() {
         this.setState({value: this.state.value + 1});
         // this.testProps = "value is change";

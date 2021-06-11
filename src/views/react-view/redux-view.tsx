@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return bindActionCreators({
         changeViewLoading: changeViewLoading
     }, dispatch);
-}
+};
 // @ts-ignore
 @connect(state => ({ loading: state[0] }), mapDispatchToProps)
 export class ReduxView extends React.Component<any, ReduxViewStates> {

@@ -63,8 +63,10 @@ export class ReduxMiddleView extends React.Component<any, any> {
     }
     render() {
         return <>
-            <h3>什么是Redux自动化</h3>
-            <p>了解自动化前先来看看Redux的基本使用流程，并看一下自动化操作后的对比视图</p>
+            <div className="g-flex-row" style={{alignItems: "baseline"}}>
+                <h3>什么是Redux自动化</h3>
+                <p> -- 了解自动化前先来看看Redux的基本使用流程，并看一下自动化操作后的对比视图</p>
+            </div>
             <div className={"g-flex-row"} style={{}}>
                 <Steps current={3} direction="vertical" style={{flexBasis: '70%'}}>
                     <Step title="根据reducers创建唯一数据源" description="createStore(reducers...)" />
@@ -85,10 +87,6 @@ export class ReduxMiddleView extends React.Component<any, any> {
 
             <h3>具体实现</h3>
             <div className={"g-flex-row"} style={{marginBottom: 10}}>
-                <Card title="Provider" style={{ width: "33%" }}>
-                    Provider作为一个容器组件，其内部主要采用React.context实现。其实就是基于React.context Provider实现的<br/>
-                    关于手动实现一个Provider可以定位到 src/views/manual-redux/automatic-static 目录。后续我会把这些测试代码放到git中进行管理。
-                </Card>
                 <Card title="connect" style={{ width: "33%" }}>
                     connect作为一个高阶组件，主要接受2个参数，后面的2个参数不常用。参数定义如下：
                     <Collapse expandIconPosition={"left"}>
@@ -123,6 +121,10 @@ export class ReduxMiddleView extends React.Component<any, any> {
                             默认值为 false。
                         </Panel>
                     </Collapse>
+                </Card>
+                <Card title="Provider" style={{ width: "33%" }}>
+                    Provider作为一个容器组件，其内部主要采用React.context实现。其实就是基于React.context Provider实现的<br/>
+                    关于手动实现一个Provider可以定位到 src/views/manual-redux/automatic-static 目录。后续我会把这些测试代码放到git中进行管理。
                 </Card>
                 <Card title="Redux中间件applyMiddleware" style={{ width: "33%" }}>
                     applyMiddlewares Redux 的原生方法，作用是将所有中间件组成一个数组，依次执行。<br/>

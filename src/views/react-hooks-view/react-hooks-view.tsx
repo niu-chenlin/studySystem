@@ -12,13 +12,17 @@ import {
 } from "../hooks-test/hook-custom";
 import { TestHookReducer } from "../hooks-test/hook-redux";
 import {
-    Counter, Parent,
+    Counter, Parent, SetDOMByCallBaskRef,
     TestHookUseEffect,
     TestHookUseState,
-    TestUseContext,
+    TestUseContext, TestUseEffectAndUseLayoutEffect,
     TestUseReducer, UseRefCounter, UseRefCounter1,
     WithoutMemo
 } from "../hooks-test/hook-api";
+
+import { Tabs, Spin } from 'antd';
+import { ReactHooksBaseView } from "./react-hooks-base-view";
+const { TabPane } = Tabs;
 
 // @ts-ignore
 @connect(state => ({ loading: state[0] }))
@@ -35,7 +39,7 @@ export class ReactHooksView extends React.Component<any, any>{
 
     render() {
         return <div id="hooks-view">
-            <h3>先不着急加入学习系统，我们先来搞懂代码</h3>
+            {/*<h3>先不着急加入学习系统，我们先来搞懂代码</h3>*/}
             {/*<ExampleUseState/>*/}
             {/*<ExampleEffectHook/>*/}
             {/*<TestHookRule/>*/}
@@ -56,7 +60,17 @@ export class ReactHooksView extends React.Component<any, any>{
             {/*<Parent/>*/}
             {/*<UseRefCounter/>*/}
             {/*<UseRefCounter1/>*/}
-            <TestUpdatePropsOrStateClass/>
+            {/*<TestUpdatePropsOrStateClass/>*/}
+            {/*<SetDOMByCallBaskRef/>*/}
+            {/*<TestUseEffectAndUseLayoutEffect/>*/}
+            <Tabs defaultActiveKey="1">
+                <TabPane tab="基本用法及简介" key="1">
+                    <ReactHooksBaseView/>
+                </TabPane>
+                <TabPane tab="实现" key="2">
+
+                </TabPane>
+            </Tabs>
         </div>
     }
 }
