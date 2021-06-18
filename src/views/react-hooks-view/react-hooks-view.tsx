@@ -22,6 +22,7 @@ import {
 
 import { Tabs, Spin } from 'antd';
 import { ReactHooksBaseView } from "./react-hooks-base-view";
+import { TestAntdFilter } from "./test-antd-filter";
 const { TabPane } = Tabs;
 
 // @ts-ignore
@@ -68,7 +69,7 @@ export class ReactHooksView extends React.Component<any, any>{
                     <ReactHooksBaseView/>
                 </TabPane>
                 <TabPane tab="实现" key="2">
-
+                    <TestAntdFilter/>
                 </TabPane>
             </Tabs>
         </div>

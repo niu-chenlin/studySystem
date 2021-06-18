@@ -20,6 +20,7 @@ export class AntdMain extends React.Component<any> {
     }
 
     render() {
+        // // router5.1中推荐使用<Route children>而不是<Route component>和<Route render>。
         return <Switch>
             {/*<Route path={'/auto'} exact render={() => {return <Redirect to={'/auto/login'}/>}}/>*/}
             <Route path={'/login'} exact render={() => {

@@ -14,4 +14,4 @@ export const ShowMenuActionCreator = (value?: any) => ({
     payload: {
         loading: value
     }
-})
+});

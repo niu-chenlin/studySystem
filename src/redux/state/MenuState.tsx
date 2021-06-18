@@ -117,6 +117,6 @@ const MenuState = [
         role: "0",
         component: AboutView
     },
-]
+];
 
 export default MenuState;
