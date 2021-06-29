@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "esnext",
-    "jsx": "react",
+    "jsx": "react", // react-jsx
     "allowJs": true,
     "sourceMap": true,
     "esModuleInterop": true, // 解决了 函数组件 TypeError: Cannot read property 'createElement' of undefined 问题
@@ -14,7 +14,9 @@
     "outDir": "dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,// false 不检查隐式any类型
+    "strict": false // 改为false - 严格模式
   },
   "include": [
     "src"

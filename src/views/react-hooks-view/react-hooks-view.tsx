@@ -23,6 +23,9 @@ import {
 import { Tabs, Spin } from 'antd';
 import { ReactHooksBaseView } from "./react-hooks-base-view";
 import { TestAntdFilter } from "./test-antd-filter";
+import { DndTable, DragSortingTable, DragTable } from "./table-drag";
+import { DndDiv } from "../react-dnd/components";
+import { DndColumn, DndRow } from "../react-dnd/react-dnd-antd-table";
 const { TabPane } = Tabs;
 
 // @ts-ignore
@@ -70,6 +73,14 @@ export class ReactHooksView extends React.Component<any, any>{
                 </TabPane>
                 <TabPane tab="实现" key="2">
                     <TestAntdFilter/>
+                </TabPane>
+                <TabPane tab="表格拖拽" key="3">
+                    <DndDiv/>
+                    {/*<DndTable/>*/}
+                    {/*<DragSortingTable/>*/}
+                    {/*<DragTable/>*/}
+                    {/*<DndRow/>*/}
+                    <DndColumn/>
                 </TabPane>
             </Tabs>
         </div>
