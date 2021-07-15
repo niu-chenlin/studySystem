@@ -435,7 +435,7 @@ export class DndColumn extends React.Component<any, any> {
         // console.log(this.state.columns);
         // update(collection, {children: {[index]: {$set: 1}}});
 
-        extend('$forEach', (value, object: any) => {
+        extend('$forEach', (value, object: any) => { // 使用extend扩展自定义方法
             return object.map((obj, index) => {
                 return update(obj, {
                     index: {$set: index}

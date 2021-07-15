@@ -216,33 +216,35 @@ const set = new Set();
 export const WithoutMemo: React.FC<{}> = () => {
     // 其它变量的修改还是会导致重新渲染，这个hook只能保证其它变量的修改不影响到我所监听的变量
     // -- 即我所监听的变量发生改变后，我再执行和该变量有关的函数
-    // 无论什么情况下调用useState都会导致重新执行该组件
+    // 无论什么情况下调用useState都会导致重新执行该组件 -- 错误的
+    // useState值相同时，不会重新render，
     console.log("使用useMemo|useCallback后还会不会导致组件重新渲染呢？");
     const [count, setCount] = useState(1);
+    // set其中任何值，再次set其它值时（其他值不变）组件会重新执行一次（仅一次）
     const [val, setValue] = useState('');
-    // function expensive() {
-    //     // 每次state的修改都会导致expensive的执行，即使修改的state和expensive函数无关，
-    //     // 这是因为useState的修改和setState更新阶段是一样的，即不管值是否相等都重新render，class有shouldComponentUpdate做判断
-    //     // 函数组件有useCallback和useMemo
-    //     console.log('compute');
-    //     let sum = 0;
-    //     for (let i = 0; i < count * 100; i++) {
-    //         sum += i;
-    //     }
-    //     return sum;
-    // }
-    const expensive = useMemo(() => { // useMemo返回缓存（memoized）的变量，useCallback返回缓存（memoized）的函数。
-        // 使用useMemo关联count值，只有在count发生改变的时候才执行useMemo的函数
+    function expensive() {
+        // 每次state的修改都会导致expensive的执行，即使修改的state和expensive函数无关，
+        // 这是因为useState的修改和setState更新阶段是一样的，即不管值是否相等都重新render，class有shouldComponentUpdate做判断
+        // 函数组件有useCallback和useMemo
         console.log('compute');
         let sum = 0;
         for (let i = 0; i < count * 100; i++) {
             sum += i;
         }
         return sum;
-    }, [count]);
-    const expensive1 = useCallback(() => { // useMemo返回缓存（memoized）的变量，useCallback返回缓存（memoized）的函数。
-        console.log("只有val发生变化时才执行此函数");
-    }, [val]);
+    }
+    // const expensive = useMemo(() => { // useMemo返回缓存（memoized）的变量，useCallback返回缓存（memoized）的函数。
+    //     // 使用useMemo关联count值，只有在count发生改变的时候才执行useMemo的函数
+    //     console.log('compute');
+    //     let sum = 0;
+    //     for (let i = 0; i < count * 100; i++) {
+    //         sum += i;
+    //     }
+    //     return sum;
+    // }, [count]);
+    // const expensive1 = useCallback(() => { // useMemo返回缓存（memoized）的变量，useCallback返回缓存（memoized）的函数。
+    //     console.log("只有val发生变化时才执行此函数");
+    // }, [val]);
 
     const callback = useCallback(() => {
         console.log(count);
@@ -253,9 +255,9 @@ export const WithoutMemo: React.FC<{}> = () => {
     // 每次修改count，set.size就会+1，这说明useCallback依赖变量count，count变更时会返回新的函数；而val变更时，
     // set.size不会变，说明返回的是缓存的旧版本函数。
     return <div>
-        <h4>{count}-{val}-{expensive}</h4>
+        <h4>{count}-{val}-{expensive()}</h4>
         <div>
-            <button onClick={() => setCount(count + 1)}>+c1</button>
+            <button onClick={() => setCount(count)}>+c1</button>
             <input value={val} onChange={event => setValue(event.target.value)}/>
         </div>
     </div>;

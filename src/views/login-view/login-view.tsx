@@ -54,8 +54,8 @@ class LoginView extends React.Component<any, LoginViewStates> {
                 AuthorTool.setAuthor(loginData);
                 setTimeout(() => {
                     this.props.history.push("/main");
+                    message.success("登录成功！");
                 }, 800);
-                message.success("登录成功！");
             } else {
                 message.error("用户名密码错误！");
             }
@@ -65,6 +65,11 @@ class LoginView extends React.Component<any, LoginViewStates> {
     }
 
     onVerification(resMsg: any) {
+        if(resMsg.code === 200) {
+            message.success("验证成功！", 1);
+        } else {
+            message.error("验证码错误！", 2);
+        }
         this.verificationRes = resMsg.code === 200;
     }
     render() {

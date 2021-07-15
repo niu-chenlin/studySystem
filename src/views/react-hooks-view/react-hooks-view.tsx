@@ -26,6 +26,7 @@ import { TestAntdFilter } from "./test-antd-filter";
 import { DndTable, DragSortingTable, DragTable } from "./table-drag";
 import { DndDiv } from "../react-dnd/components";
 import { DndColumn, DndRow } from "../react-dnd/react-dnd-antd-table";
+import { HooksView } from "../hooks-test/hooks-view/hooks-view";
 const { TabPane } = Tabs;
 
 // @ts-ignore
@@ -35,10 +36,10 @@ export class ReactHooksView extends React.Component<any, any>{
         super(props);
     }
     componentDidMount() {
-        this.props.dispatch(changeViewLoading(true));
-        setTimeout(() => {
-            this.props.dispatch(changeViewLoading(false));
-        }, 500);
+        // this.props.dispatch(changeViewLoading(true));
+        // setTimeout(() => {
+        //     this.props.dispatch(changeViewLoading(false));
+        // }, 500);
     }
 
     render() {
@@ -60,7 +61,7 @@ export class ReactHooksView extends React.Component<any, any>{
             {/*<TestUseContext/>*/}
             {/*<Counter/>*/}
             {/*<TestUseReducer/>*/}
-            {/*<WithoutMemo/>*/}
+            <WithoutMemo/>
             {/*<Parent/>*/}
             {/*<UseRefCounter/>*/}
             {/*<UseRefCounter1/>*/}
@@ -83,6 +84,7 @@ export class ReactHooksView extends React.Component<any, any>{
                     <DndColumn/>
                 </TabPane>
             </Tabs>
+            {/*<HooksView/>*/}
         </div>
     }
 }

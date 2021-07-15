@@ -383,3 +383,12 @@ export class DndTable extends React.Component<any, any> {
         </DndProvider>
     }
 }
+
+class TestPureComponent extends React.PureComponent<any, any> {
+    constructor(props) {
+        super(props);
+    }
+    // 除了为你提供了一个具有浅比较的shouldComponentUpdate方法，PureComponent和Component基本上完全相同。
+    // 当props或者state改变时，PureComponent将对props和state进行浅比较。另一方面，Component不会比较当前和下个状态的props和state。
+    // 因此，每当shouldComponentUpdate被调用时，组件默认的会重新渲染。
+}

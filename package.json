@@ -54,7 +54,7 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "testnpm_ncl": "^1.0.8",
-    "verification_code_ncl": "^1.0.16"
+    "verification_code_ncl": "^1.0.18"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.13.15",

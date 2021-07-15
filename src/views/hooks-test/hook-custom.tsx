@@ -112,6 +112,12 @@ export class TestCourseClass extends React.Component<any, any> {
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any): void {
         console.log("componentDidUpdate 在组件完成更新后立即调用 -- 更新阶段");
         console.log(this);
+        // react中的state是Immutability有什么好处呢？
+        //
+        // 这里涉及到react的性能优化，react内部会维护一份UI（虚拟DOM），当组件属性或状态发生改变，react对应的虚拟DOM数据也会更新，
+        // 不用更新真正的DOM，更加方便快捷，然后react会对现在和更新前的虚拟DOM进行比较，找出变化的元素，只有变化的元素会在真实DOM中更新，
+        // 但是有时候一些DOM元素自身没有变化，但会被其他元素影响造成重新渲染，这个时候可以用shouldComponentUpdate方法来判断props或state是不是真的改变了（改变了返回true，否则返回false）。
+        // 如果组件的属性和状态是Immutability的对象或值，就可以通过相等来比较了
     }
 
     componentWillUnmount(): void {

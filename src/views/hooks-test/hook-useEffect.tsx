@@ -6,9 +6,11 @@ function Example() {
     const [count, setCount] = useState(0);
 
     // Similar to componentDidMount and componentDidUpdate:
+    // 为什么不是will，因为函数组件总是先return class组件不是
     useEffect(() => {
         // Effect Hook 为你的函数式组件增添了执行 side effects 的能力。
         // 数据获取、设置订阅以及手动更改 React 组件中的 DOM 都是 side effects 的例子。
+        // side effects 额外带的一些效果和作用
         document.title = `You clicked ${count} times`; // 函数或者表达式修改了它的 scope 之外的状态
     });
     // React 组件中有两种常见的 side effects ：不需要清理的和需要清理的。让我们更详细地看看这个区别。

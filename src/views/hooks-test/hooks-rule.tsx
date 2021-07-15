@@ -76,6 +76,7 @@ export const TestHookRule: React.FC<{}> = () => {
 // 假如某个useState没有执行，会导致指针移动出错，数据存取出错
 // 我们动手实现一个useState
 // 初始useState
+// 源码参考：https://www.cnblogs.com/leslie1943/articles/13929314.html
 let state1; // 此处有一个问题，我们有多个state怎么办？变量state不就被重置了！
 function useState1(initialState) {
     state = state || initialState;

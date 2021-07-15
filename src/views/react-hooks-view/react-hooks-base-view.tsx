@@ -15,8 +15,8 @@ export class ReactHooksBaseView extends React.Component<any, any> {
     render() {
         return <>
             <div className="g-flex-row" style={{alignItems: "baseline"}}>
-                <h3>React Hooks简介</h3>
-                <p> -- React Hooks简介及其用法（原生Hooks和自定义Hooks，想要使用更多Hooks请到：<a href="https://github.com/zenghongtu/react-use-chinese/blob/master/README.md" target="_blank">react-use</a></p>
+                <h3>React Hooks 简介</h3>
+                <h3> &nbsp;&nbsp;-- React Hooks简介及其用法（原生Hooks和自定义Hooks，想要使用更多Hooks请到：<a href="https://github.com/zenghongtu/react-use-chinese/blob/master/README.md" target="_blank">react-use</a></h3>
             </div>
             <div className="g-synopsis">
                 <p>叩击灵魂三问曲：1.Hooks是什么？ 2.React团队为什么要设计它，它的出现解决了什么问题？ 3.我该不该使用Hooks，在什么情况下使用Hooks?</p>
@@ -47,12 +47,14 @@ export class ReactHooksBaseView extends React.Component<any, any> {
                         然后灵活配置我们想要的页面。这点应该是react hooks最大的优点，它通过自定义hooks来复用状态。<br/>
                         2.组件树层级变浅。避免了使用类组件中的HOC/render props 等方式增加组件树层数及渲染。<br/>
                         3.不用再去考虑 this 的指向问题。在类组件中，你必须去理解 JavaScript 中 this 的工作方式。<br/>
-                        4.清爽的代码风格+代码量更少<br/>
+                        4.清爽的代码风格+代码量更少
+                        <hr/>
                         <h3>缺点：</h3>
                         1.响应式的useEffect，写函数组件时，你不得不改变一些写法习惯。你必须清楚代码中useEffect和useCallback的“依赖项数组”的改变时机。
                         防止你不清楚useEffect依赖链或意外触发了依赖链中的某一项带来的未知问题。<br/>
                         2.状态不同步，每个hook都是一个单独的函数，当有异步操作时（比如在setTimeout中alert当前state），你会发现alert的值不是最新的。因为每次setState都是一个新的函数被创建，
                         新的函数意味着新的作用域。
+                        <hr/>
                         <h3>怎么避免react hooks的常见问题：</h3>
                         1.不要在useEffect里面写太多的依赖项，划分这些依赖项成多个单一功能的useEffect。其实这点是遵循了软件设计的“单一职责模式”。<br/>
                         2.如果你碰到状态不同步的问题，可以考虑下手动传递参数到函数。但最优解决方案还是使用useRef（它的实例不会发生变化）。<br/>
@@ -62,11 +64,23 @@ export class ReactHooksBaseView extends React.Component<any, any> {
                     </Panel>
                 </Collapse>
             </div>
-            <h3>基本用法：</h3>
+            <h3>基本（自带）API：</h3>
             <div className={"g-flex-row"} style={{marginBottom: 10}}>
-                <Card title="useState" style={{ width: "33%" }}>
-                    允许你将 React state(状态) 添加到函数式组件中。
-                </Card>
+                <div className="g-synopsis" style={{ width: "50%" }}>
+                    <Collapse accordion={true} expandIconPosition={"left"} >
+                        <Panel header="useState()" key="1" extra={this.getExtra()}>
+                            允许你将 React state(状态) 添加到函数式组件中。<br/>
+                            userData 定义函数组件state，类似this.state，但是不同于state的是useState不会对state进行合并，而是直接覆盖
+                        </Panel>
+                    </Collapse>
+                </div>
+                <div className="g-synopsis" style={{ width: "50%" }}>
+                    <Collapse accordion={true} expandIconPosition={"left"} >
+                        <Panel header="useState()" key="1" extra={this.getExtra()}>
+                            允许你将 React state(状态) 添加到函数式组件中。
+                        </Panel>
+                    </Collapse>
+                </div>
             </div>
         </>
     }
