@@ -121,7 +121,8 @@ class MainView extends React.Component<any, any> {
                             onClick: this.toggle,
                             style: {
                                 fontSize: '25px',
-                                verticalAlign: 'middle'
+                                verticalAlign: 'middle',
+                                color: 'white'
                             }
                         }
                         )}
@@ -144,7 +145,7 @@ class MainView extends React.Component<any, any> {
                             padding: '10px 50px',
                             // background: '#f0f2f5',
                             fontSize: 16
-                        }}>sean知识体系 ©2021 Created by Sean</Footer>
+                        }}>大森林的早晨 知识体系 ©2021 Created by 大森林的早晨</Footer>
                 </Layout>
             </Layout>
         </div>

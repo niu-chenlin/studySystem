@@ -1,17 +1,28 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "commonjs", // 规定了项目的模块化方式，选项有 AMD，UMD，commonjs 等。
     "target": "esnext",
     "jsx": "react", // react-jsx
-    "allowJs": true,
+    "allowJs": true, // 顾名思义，允许在 TypeScript 项目中使用 JavaScript，这在从 JavaScript 迁移到 TypeScript 中是非常重要的。
     "sourceMap": true,
     "esModuleInterop": true, // 解决了 函数组件 TypeError: Cannot read property 'createElement' of undefined 问题
     // 目前很多常用的包是基于 cjs / UMD 开发的，而写前端代码一般是写 esm，所以常见的场景是 esm 导入 cjs 的库。
     // 但是由于 esm 和 cjs 存在概念上的差异，最大的差异点在于 esm 有 default 的概念而 cjs 没有，所以在 default 上会出问题。
     // TS babel webpack 都有自己的一套处理机制来处理这个兼容问题，核心思想基本都是通过 default 属性的增添和读取
+    // cjs和esm 是模块化根据不同的模块化规范打包出文件的后缀名 cjs - CommonJS - AMD
+    // esm是根据最新的ES Module打包出的文件
+    // 4种模块化规范 CommonJS AMD CMD ES Module
+    // CommonJS: nodeJS采用 - 缺点模块加载是同步的 在服务端没事 在前端影响性能
+    // AMD: 异步的模块加载 RequireJS是AMD规范的实现
+    // CMD: SeaJS是CMD规范的实现
+    // 1. 对于依赖的模块，AMD 是提前执行，CMD 是延迟执行。不过 RequireJS 从 2.0 开始，也改成可以延迟执行（根据写法不同，处理方式不同）。CMD 推崇 as lazy as possible.
+    // 2. CMD 推崇依赖就近，AMD 推崇依赖前置。看代码：
+    // CMD性能好,因为只有用户需要的时候才执行;AMD用户体验好,因为没有延迟,依赖模块提前执行了
+    // AMD和CMD最大的区别是对依赖模块的执行时机处理不同,注意不是加载的时机或者方式不同
+    // 加载模块都是异步的,只不过AMD依赖前置
     "moduleResolution": "node",
     "lib": ["esnext", "dom"],
-    "outDir": "dist",
+    "outDir": "dist", // outDir 和 outFile 这两个配置则是告诉 TypeScript 将文件生成到哪里。
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,

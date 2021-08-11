@@ -146,6 +146,17 @@ module.exports = {
         port: 8888,
         inline: true,
         contentBase:  path.join(__dirname, "dist"),
+        proxy: {
+            '/map': { // 代理请求会在target后面加上/map，因此需要pathRewrite重定向
+                target: 'https://apis.map.qq.com/ws/direction/v1/walking/',
+                // target: 'https://apis.map.qq.com/ws/direction/v1/walking/?from=39.99056917901832,116.2809705734253&to=39.98705097110308,116.28056287765503&key=PGPBZ-EPBK4-JFZUT-X4PIJ-7C3BZ-CUB74',
+                changeOrigin: true, // 这个参数可以让target参数是域名。
+                secure: false, // 不检查安全问题 设置后，可以接受运行在 HTTPS 上，可以使用无效证书的后端服务器
+                pathRewrite: {
+                    '^/map': '/'   //重写接口 - 以/map开头的替换为/ - 记得配置文件的修改需要重启服务
+                }
+            }
+        }
     },
     devtool: "source-map", // inline-source-map
     plugins: [
