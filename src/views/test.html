@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #k1 {
+            width: 100px;
+            height: 200px;
+            border: 1px solid red;
+        }
+        #k2 {
+            width: 150px;
+            height: 100px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id="k1">
+        <div id="k2">aaaaaaaaaaaaaaaaaaaaaaa</div>
+    </div>
+</body>
+<script type="text/javascript">
+    let stageArr = [
+        {stageName: "起点"},
+        {stageName: "过程"},
+        {stageName: "终点"}
+    ];
+    let marker = [
+        {content: "起点", value: 0},
+            {content: "虚拟点", value: 1},
+            {content: "虚拟点", value: 2},
+            {content: "虚拟点", value: 3},
+        {content: "过程", value: 4},
+            {content: "虚拟点", value: 5},
+        {content: "终点", value: 6},
+    ];
+    let line = [
+            {line: 0},
+            {line: 1},
+            {line: 2},
+            {line: 3},
+        {line: 4},
+        {line: 5},
+    ];
+    isOk();
+    console.log(stageArr);
+    function isOk() {
+        for(let i = 0; i < stageArr.length; i++) {
+            stageArr[i].paths = retData(stageArr[i]);
+        }
+    }
+    function retData(stage) {
+        let from = marker.findIndex(marker => marker.content === stage.stageName);
+        // let tempArr = marker.slice(from);
+        let to = marker.findIndex(marker => marker.content !== stage.stageName && marker.content !== "虚拟点");
+        marker.splice(from, to);
+        return getLine(from, to);
+    }
+    function getLine(from, to) {
+        return line.splice(from, to);
+    }
+    let ret = [];
+    let p = [{lag:1, lng:2},{lag:1, lng:2},{lag:1, lng:2},{lag:1, lng:2}];
+    ret.push(...p);
+    ret.push(...p);
+    console.log(ret);
+</script>
+</html>

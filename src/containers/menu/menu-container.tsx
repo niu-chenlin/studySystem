@@ -51,5 +51,21 @@ class MenuContainer extends React.Component<MenuContainerProps, any> {
             {this.state.menuList}
         </Menu>
     }
+    // render() {
+    //     return  <Menu
+    //         style={{
+    //             display: 'block',
+    //             fontSize: 15,
+    //             width: 20,
+    //             height: 30,
+    //         }}
+    //         theme="dark"
+    //         defaultSelectedKeys={['1']}
+    //         mode="inline"
+    //         onClick={(e) => this.menuOnClick(e)}
+    //     >
+    //         {this.state.menuList}
+    //     </Menu>
+    // }
 }
 export default withRouter(MenuContainer)
